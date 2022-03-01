@@ -1,17 +1,9 @@
 package br.com.silvaandersonm.trabfinal.domain.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
 
-public interface ClubeRepository {
-
-	public Clube obterPorId(Long id);
-
-	public List<Clube> listar();
-
-	public void incluir(Clube clube);
-
-	public void atualizar(Clube clube);
+public interface ClubeRepository extends JpaRepository<Clube, Long> {
 
 }
