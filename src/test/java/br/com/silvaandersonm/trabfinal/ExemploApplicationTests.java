@@ -1,10 +1,10 @@
-package br.com.silvaandersonm.exemplo;
+package br.com.silvaandersonm.trabfinal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ExemploApplicationTests {
+class TrabFinalApplicationTests {
 
 	@Test
 	void contextLoads() {
