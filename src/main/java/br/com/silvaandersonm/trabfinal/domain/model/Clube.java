@@ -9,8 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "clube")
+@Data
 public class Clube {
 
 	@Id
@@ -32,53 +35,5 @@ public class Clube {
 
 	@Column(name="nm_estadio", length=30, nullable=true)
 	private String estadio;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCidade() {
-		return cidade;
-	}
-
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
-	}
-
-	public String getUf() {
-		return uf;
-	}
-
-	public void setUf(String uf) {
-		this.uf = uf;
-	}
-
-	public Date getDataFundacao() {
-		return dataFundacao;
-	}
-
-	public void setDataFundacao(Date dataFundacao) {
-		this.dataFundacao = dataFundacao;
-	}
-
-	public String getEstadio() {
-		return estadio;
-	}
-
-	public void setEstadio(String estadio) {
-		this.estadio = estadio;
-	}
 
 }

@@ -11,8 +11,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "transferencia")
+@Data
 public class Transferencia {
 
 	@Id
@@ -36,53 +39,5 @@ public class Transferencia {
 	
 	@Column(name="ds_moeda", nullable=false)
 	private String moeda;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Clube getClubeOrigem() {
-		return clubeOrigem;
-	}
-
-	public void setClubeOrigem(Clube clubeOrigem) {
-		this.clubeOrigem = clubeOrigem;
-	}
-
-	public Clube getClubeDestino() {
-		return clubeDestino;
-	}
-
-	public void setClubeDestino(Clube clubeDestino) {
-		this.clubeDestino = clubeDestino;
-	}
-
-	public Date getData() {
-		return data;
-	}
-
-	public void setData(Date data) {
-		this.data = data;
-	}
-
-	public Double getValor() {
-		return valor;
-	}
-
-	public void setValor(Double valor) {
-		this.valor = valor;
-	}
-
-	public String getMoeda() {
-		return moeda;
-	}
-
-	public void setMoeda(String moeda) {
-		this.moeda = moeda;
-	}
 
 }

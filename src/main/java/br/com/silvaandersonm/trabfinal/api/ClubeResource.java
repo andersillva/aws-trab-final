@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.silvaandersonm.trabfinal.domain.business.ClubeService;
-import br.com.silvaandersonm.trabfinal.domain.business.exception.BusinessException;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
+import br.com.silvaandersonm.trabfinal.domain.service.ClubeService;
 
 @RestController
 @RequestMapping("/api")
@@ -26,65 +25,41 @@ public class ClubeResource {
 	private ClubeService clubeService;
 
 	@GetMapping("/clubes")
-	public ResponseEntity<List<Clube>> getClubes() {
-		try {
-			List<Clube> clubes = clubeService.listar();
-			if (clubes.size() > 0) {
-				return new ResponseEntity<>(clubes, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	public ResponseEntity<List<Clube>> listarClubes() {
+		List<Clube> clubes = clubeService.listar();
+		if (clubes.size() > 0) {
+			return new ResponseEntity<>(clubes, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/clubes/{id}")
-	public ResponseEntity<Clube> getClube(@PathVariable("id") Long id) {
+	public ResponseEntity<Clube> obterClube(@PathVariable("id") Long id) {
 		Clube clube = clubeService.obterPorId(id);
-		if (clube != null) {
-			return new ResponseEntity<>(clube, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		return new ResponseEntity<>(clube, HttpStatus.OK);
 	}
 
 	@GetMapping("/clubes/{id}/atletas")
-	public ResponseEntity<List<Atleta>> getAtletas(@PathVariable("id") Long idClube) {
-		try {
-			List<Atleta> atletas = clubeService.listarAtletas(idClube);
-			if (atletas.size() > 0) {
-				return new ResponseEntity<>(atletas, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-		} catch (BusinessException e) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	public ResponseEntity<List<Atleta>> listarAtletas(@PathVariable("id") Long idClube) {
+		List<Atleta> atletas = clubeService.listarAtletas(idClube);
+		if (atletas.size() > 0) {
+			return new ResponseEntity<>(atletas, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@PostMapping("/clubes")
-	public ResponseEntity<Clube> postClube(@RequestBody Clube clube) {
-		try {
-			clubeService.incluir(clube);
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	public ResponseEntity<Clube> incluirClube(@RequestBody Clube clube) {
+		clubeService.incluir(clube);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@PutMapping("/clubes/{id}")
-	public ResponseEntity<Clube> putClube(@PathVariable("id") Long id, @RequestBody Clube clube) {
-		try {
-			clubeService.alterar(clube);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (BusinessException e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	public ResponseEntity<Clube> alterarClube(@PathVariable("id") Long id, @RequestBody Clube clube) {
+		clubeService.alterar(clube);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
