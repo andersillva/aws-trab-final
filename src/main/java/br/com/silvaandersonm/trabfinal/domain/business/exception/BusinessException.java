@@ -1,4 +1,4 @@
-package br.com.silvaandersonm.trabfinal.util;
+package br.com.silvaandersonm.trabfinal.domain.business.exception;
 
 public class BusinessException extends Exception {
 

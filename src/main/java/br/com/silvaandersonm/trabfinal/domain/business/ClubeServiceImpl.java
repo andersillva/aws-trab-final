@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.silvaandersonm.trabfinal.domain.business.exception.BusinessException;
+import br.com.silvaandersonm.trabfinal.domain.business.exception.BusinessExceptionType;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
 import br.com.silvaandersonm.trabfinal.domain.repository.ClubeRepository;
-import br.com.silvaandersonm.trabfinal.util.BusinessException;
-import br.com.silvaandersonm.trabfinal.util.BusinessExceptionType;
 
 @Service
 public class ClubeServiceImpl implements ClubeService {
@@ -24,7 +24,10 @@ public class ClubeServiceImpl implements ClubeService {
 
 	@Override
 	public void alterar(Clube clube) throws BusinessException {
-		if (clube.getId() != null && clubeRepository.existsById(clube.getId())) {
+		if (clube == null || clube.getId() == null)
+			throw new BusinessException(BusinessExceptionType.PARAMETROS_OBRIGATORIOS_NAO_INFORMADOS);
+
+		if (clubeRepository.existsById(clube.getId())) {
 			clubeRepository.saveAndFlush(clube);
 		} else {
 			throw new BusinessException(BusinessExceptionType.REGISTRO_NAO_ENCONTRADO);
@@ -42,9 +45,12 @@ public class ClubeServiceImpl implements ClubeService {
 	}
 
 	@Override
-	public List<Atleta> listarAtletas(Long idClube) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Atleta> listarAtletas(Long idClube) throws BusinessException {
+		Clube clube = obterPorId(idClube);
+		if (clube == null) {
+			throw new BusinessException(BusinessExceptionType.REGISTRO_NAO_ENCONTRADO);
+		}
+		return clubeRepository.listarAtletas(idClube);
 	}
 
 }

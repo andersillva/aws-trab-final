@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.silvaandersonm.trabfinal.domain.business.ClubeService;
+import br.com.silvaandersonm.trabfinal.domain.business.exception.BusinessException;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
-import br.com.silvaandersonm.trabfinal.util.BusinessException;
 
 @RestController
 @RequestMapping("/api")
-public class ClubeController {
+public class ClubeResource {
 
 	@Autowired
 	private ClubeService clubeService;
@@ -56,8 +56,10 @@ public class ClubeController {
 			if (atletas.size() > 0) {
 				return new ResponseEntity<>(atletas, HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
+		} catch (BusinessException e) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
