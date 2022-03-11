@@ -14,4 +14,6 @@ public interface AtletaService {
 
 	public List<Atleta> listar();
 
+	public void excluir(Long id);
+
 }

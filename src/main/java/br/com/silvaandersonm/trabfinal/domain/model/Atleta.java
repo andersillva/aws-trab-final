@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -24,28 +26,35 @@ public class Atleta {
 	private Long id;
 
 	@Column(name="nm_atleta", length=30, nullable=false)
+	@NotBlank
 	private String nome;
 
 	@Column(name="nm_completo", length=60, nullable=false)
+	@NotBlank
 	private String nomeCompleto;
 
 	@Column(name="dt_nascimento", nullable=false)
+	@NotNull
 	private Date dataNascimento;
 
 	@Column(name="nm_cidade_nascimento", length=60, nullable=false)
+	@NotBlank
 	private String cidadeNascimento;
 
 	@Column(name="sg_uf_nascimento", length=2, nullable=true)
 	private String ufNascimento;
 
 	@Column(name="nm_pais_nascimento", length=30, nullable=false)
+	@NotBlank
 	private String paisNascimento;
 
 	@Column(name="nr_altura", precision=10, scale=2, nullable=false)
+	@NotNull
 	private Float altura;
 
 	@ManyToOne
 	@JoinColumn(name = "id_clube", nullable=false)
+	@NotNull
 	private Clube clube;
 
 }

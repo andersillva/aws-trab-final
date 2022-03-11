@@ -17,4 +17,6 @@ public interface ClubeService {
 
 	public List<Atleta> listarAtletas(Long idClube);
 
+	public void excluir(Long id);
+
 }

@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.repository.AtletaRepository;
 import br.com.silvaandersonm.trabfinal.domain.service.AtletaService;
+import br.com.silvaandersonm.trabfinal.domain.service.exception.IntegridadeReferencialException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.ParametroRequeridoException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.RegistroNaoEncontradoException;
 
@@ -26,7 +28,7 @@ public class AtletaServiceImpl implements AtletaService {
 
 	@Override
 	public void alterar(Atleta atleta) {
-		if (atleta == null || atleta.getId() == null)
+		if (atleta.getId() == null)
 			throw new ParametroRequeridoException();
 
 		obterPorId(atleta.getId());
@@ -42,6 +44,17 @@ public class AtletaServiceImpl implements AtletaService {
 	@Override
 	public List<Atleta> listar() {
 		return atletaRepository.findAll();
+	}
+
+	@Override
+	public void excluir(Long id) {
+		if (atletaRepository.existsById(id)) {
+			try {
+				atletaRepository.deleteById(id);
+			} catch (DataIntegrityViolationException e) {
+				throw new IntegridadeReferencialException();
+			}
+		}
 	}
 
 }
