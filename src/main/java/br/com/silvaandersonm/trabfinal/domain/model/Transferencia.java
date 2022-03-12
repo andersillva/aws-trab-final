@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -25,19 +27,29 @@ public class Transferencia {
 
 	@ManyToOne
 	@JoinColumn(name = "id_clube_origem", nullable=false)
+	@NotNull
 	private Clube clubeOrigem;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_clube_destino", nullable=false)
+	@NotNull
 	private Clube clubeDestino;
 
+	@ManyToOne
+	@JoinColumn(name = "id_atleta", nullable=false)
+	@NotNull
+	private Atleta atleta;
+
 	@Column(name="dt_transferencia", nullable=false)
+	@NotNull
 	private Date data;
 
 	@Column(name="vl_transferencia", nullable=false)
+	@NotNull
 	private Double valor;
 	
 	@Column(name="ds_moeda", nullable=false)
+	@NotBlank
 	private String moeda;
 
 }

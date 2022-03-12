@@ -39,6 +39,7 @@ CREATE TABLE transferencia (
 	id_transferencia	INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	id_clube_origem		INT NOT NULL,
 	id_clube_destino	INT NOT NULL,
+	id_atleta			INT NOT NULL,
 	dt_transferencia	DATE NOT NULL,
 	vl_transferencia	DECIMAL(12,2) NOT NULL,
 	ds_moeda			VARCHAR(10) NOT NULL
@@ -51,5 +52,9 @@ ALTER TABLE transferencia
 ALTER TABLE transferencia
     ADD CONSTRAINT trans_clube_dest_fk FOREIGN KEY ( id_clube_destino )
         REFERENCES clube ( id_clube );
+
+ALTER TABLE transferencia
+    ADD CONSTRAINT trans_atl_fk FOREIGN KEY ( id_atleta )
+        REFERENCES atleta ( id_atleta );
 
 ------------------------------------------------

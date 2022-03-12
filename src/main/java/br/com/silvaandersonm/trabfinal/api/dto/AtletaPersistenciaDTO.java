@@ -1,4 +1,4 @@
-package br.com.silvaandersonm.trabfinal.domain.dto;
+package br.com.silvaandersonm.trabfinal.api.dto;
 
 import java.util.Date;
 
@@ -8,9 +8,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class AtletaSalvamentoDTO {
-
-	private Long id;
+public class AtletaPersistenciaDTO {
 
 	@NotBlank
 	private String nome;
@@ -31,8 +29,5 @@ public class AtletaSalvamentoDTO {
 
 	@NotNull
 	private Float altura;
-
-	@NotNull
-	private Long idClube;
 
 }

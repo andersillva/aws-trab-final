@@ -1,4 +1,4 @@
-package br.com.silvaandersonm.trabfinal.api;
+package br.com.silvaandersonm.trabfinal.api.resource;
 
 import java.net.URI;
 import java.util.List;

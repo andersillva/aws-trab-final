@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
@@ -23,22 +25,29 @@ public class ClubeServiceImpl implements ClubeService {
 	private ClubeRepository clubeRepository;
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void incluir(Clube clube) {
 		clube.setId(null);
-		try {
-			clubeRepository.saveAndFlush(clube);
-		} catch (DataIntegrityViolationException e) {
-			throw new RegistroDuplicadoException();
-		}
+		salvar(clube);
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void alterar(Clube clube) {
 		if (clube.getId() == null)
 			throw new ParametroRequeridoException();
 
 		obterPorId(clube.getId());
-		clubeRepository.saveAndFlush(clube);
+		salvar(clube);
+	}
+
+	@Transactional(propagation=Propagation.REQUIRED)
+	private void salvar(Clube clube) {
+		try {
+			clubeRepository.saveAndFlush(clube);
+		} catch (DataIntegrityViolationException e) {
+			throw new RegistroDuplicadoException();
+		}
 	}
 
 	@Override
@@ -59,6 +68,7 @@ public class ClubeServiceImpl implements ClubeService {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void excluir(Long id) {
 		if (clubeRepository.existsById(id)) {
 			try {
