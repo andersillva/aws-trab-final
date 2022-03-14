@@ -13,7 +13,6 @@ import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
 import br.com.silvaandersonm.trabfinal.domain.repository.ClubeRepository;
 import br.com.silvaandersonm.trabfinal.domain.service.ClubeService;
-import br.com.silvaandersonm.trabfinal.domain.service.exception.IntegridadeReferencialException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.ParametroRequeridoException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.RegistroDuplicadoException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.RegistroNaoEncontradoException;
@@ -71,11 +70,7 @@ public class ClubeServiceImpl implements ClubeService {
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void excluir(Long id) {
 		if (clubeRepository.existsById(id)) {
-			try {
-				clubeRepository.deleteById(id);
-			} catch (DataIntegrityViolationException e) {
-				throw new IntegridadeReferencialException();
-			}
+			clubeRepository.deleteById(id);
 		}
 	}
 

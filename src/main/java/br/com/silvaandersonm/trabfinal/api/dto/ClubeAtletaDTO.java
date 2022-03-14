@@ -3,12 +3,10 @@ package br.com.silvaandersonm.trabfinal.api.dto;
 import lombok.Data;
 
 @Data
-public class AtletaResumoDTO {
+public class ClubeAtletaDTO {
 
 	private Long id;
 
 	private String nome;
-
-	private ClubeResumoDTO clube;
 
 }

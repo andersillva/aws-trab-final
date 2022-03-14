@@ -1,5 +1,6 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
@@ -8,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class TransferenciaPersistenciaDTO {
+public class TransferenciaInclusaoDTO {
 
 	@NotNull
 	private Long idClubeOrigem;
@@ -23,7 +24,7 @@ public class TransferenciaPersistenciaDTO {
 	private Date data;
 
 	@NotNull
-	private Double valor;
+	private BigDecimal valor;
 
 	@NotBlank
 	private String moeda;

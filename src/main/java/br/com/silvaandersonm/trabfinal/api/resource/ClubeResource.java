@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.silvaandersonm.trabfinal.api.dto.AtletaClubeDTO;
+import br.com.silvaandersonm.trabfinal.api.dto.ClubeAtletaDTO;
+import br.com.silvaandersonm.trabfinal.api.dto.ClubeDTO;
+import br.com.silvaandersonm.trabfinal.api.dto.ClubePersistenciaDTO;
+import br.com.silvaandersonm.trabfinal.api.dto.ClubeResumoDTO;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
 import br.com.silvaandersonm.trabfinal.domain.service.ClubeService;
@@ -34,42 +37,51 @@ public class ClubeResource {
 	private ClubeService clubeService;
 
 	@GetMapping("/clubes")
-	public ResponseEntity<List<Clube>> listarClubes() {
+	public ResponseEntity<List<ClubeResumoDTO>> listarClubes() {
 		List<Clube> clubes = clubeService.listar();
 		if (clubes.size() > 0) {
-			return new ResponseEntity<>(clubes, HttpStatus.OK);
+			ModelMapper mapper = new ModelMapper();
+			List<ClubeResumoDTO> clubesResumoDTO = clubes.stream().map(c -> mapper.map(c, ClubeResumoDTO.class)).collect(Collectors.toList());
+			return new ResponseEntity<>(clubesResumoDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/clubes/{id}")
-	public ResponseEntity<Clube> obterClube(@PathVariable("id") Long id) {
+	public ResponseEntity<ClubeDTO> obterClube(@PathVariable("id") Long id) {
 		Clube clube = clubeService.obterPorId(id);
-		return new ResponseEntity<>(clube, HttpStatus.OK);
+		ModelMapper mapper = new ModelMapper();
+		ClubeDTO clubeDTO = mapper.map(clube, ClubeDTO.class);
+		return new ResponseEntity<>(clubeDTO, HttpStatus.OK);
 	}
 
 	@GetMapping("/clubes/{id}/atletas")
-	public ResponseEntity<List<AtletaClubeDTO>> listarAtletas(@PathVariable("id") Long idClube) {
+	public ResponseEntity<List<ClubeAtletaDTO>> listarAtletas(@PathVariable("id") Long idClube) {
 		List<Atleta> atletas = clubeService.listarAtletas(idClube);
 		ModelMapper mapper = new ModelMapper();
-		List<AtletaClubeDTO> atletasClubeDTO = atletas.stream().map(a -> mapper.map(a, AtletaClubeDTO.class)).collect(Collectors.toList());
+		List<ClubeAtletaDTO> clubeAtletaDTO = atletas.stream().map(a -> mapper.map(a, ClubeAtletaDTO.class)).collect(Collectors.toList());
 		if (atletas.size() > 0) {
-			return new ResponseEntity<>(atletasClubeDTO, HttpStatus.OK);
+			return new ResponseEntity<>(clubeAtletaDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@PostMapping(path="/clubes", consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> incluirClube(@Valid @RequestBody Clube clube) {
+	public ResponseEntity<Void> incluirClube(@Valid @RequestBody ClubePersistenciaDTO clubePersistenciaDTO) {
+		ModelMapper mapper = new ModelMapper();
+		Clube clube = mapper.map(clubePersistenciaDTO, Clube.class);
 		clubeService.incluir(clube);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(clube.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
 	@PutMapping(path="/clubes/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> alterarClube(@PathVariable("id") Long id, @Valid @RequestBody Clube clube) {
+	public ResponseEntity<Void> alterarClube(@PathVariable("id") Long id, @Valid @RequestBody ClubePersistenciaDTO clubePersistenciaDTO) {
+		ModelMapper mapper = new ModelMapper();
+		Clube clube = mapper.map(clubePersistenciaDTO, Clube.class);
+		clube.setId(id);
 		clubeService.alterar(clube);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

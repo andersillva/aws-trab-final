@@ -1,5 +1,6 @@
 package br.com.silvaandersonm.trabfinal.domain.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -46,8 +47,8 @@ public class Transferencia {
 
 	@Column(name="vl_transferencia", nullable=false)
 	@NotNull
-	private Double valor;
-	
+	private BigDecimal valor;
+
 	@Column(name="ds_moeda", nullable=false)
 	@NotBlank
 	private String moeda;

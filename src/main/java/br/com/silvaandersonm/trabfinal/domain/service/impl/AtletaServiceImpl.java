@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.repository.AtletaRepository;
 import br.com.silvaandersonm.trabfinal.domain.service.AtletaService;
-import br.com.silvaandersonm.trabfinal.domain.service.exception.IntegridadeReferencialException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.ParametroRequeridoException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.RegistroDuplicadoException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.RegistroNaoEncontradoException;
@@ -64,11 +63,7 @@ public class AtletaServiceImpl implements AtletaService {
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void excluir(Long id) {
 		if (atletaRepository.existsById(id)) {
-			try {
-				atletaRepository.deleteById(id);
-			} catch (DataIntegrityViolationException e) {
-				throw new IntegridadeReferencialException();
-			}
+			atletaRepository.deleteById(id);
 		}
 	}
 

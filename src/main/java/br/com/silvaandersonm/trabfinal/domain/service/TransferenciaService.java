@@ -14,4 +14,6 @@ public interface TransferenciaService {
 
 	public List<Transferencia> listar();
 
+	public void excluir(Long id);
+
 }

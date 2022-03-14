@@ -1,5 +1,6 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
@@ -13,11 +14,11 @@ public class TransferenciaDTO {
 	
 	private ClubeResumoDTO clubeDestino;
 	
-	private AtletaResumoDTO atleta;
+	private ClubeAtletaDTO atleta;
 
 	private Date data;
 
-	private Double valor;
+	private BigDecimal valor;
 
 	private String moeda;
 

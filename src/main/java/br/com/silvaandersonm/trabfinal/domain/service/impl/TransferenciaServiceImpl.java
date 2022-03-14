@@ -44,7 +44,6 @@ public class TransferenciaServiceImpl implements TransferenciaService {
 
 		obterPorId(transferencia.getId());
 		salvar(transferencia);
-		alterarClubeAtleta(transferencia);
 	}
 
 	@Transactional(propagation=Propagation.REQUIRED)
@@ -66,6 +65,16 @@ public class TransferenciaServiceImpl implements TransferenciaService {
 		atletaRepository.saveAndFlush(transferencia.getAtleta());	
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED)
+	private void desfazerAlteracaoClubeAtleta(Transferencia transferencia) {
+		Atleta atleta = atletaRepository.getById(transferencia.getAtleta().getId());
+		if (atleta.getClube().getId() != transferencia.getClubeDestino().getId()) {
+			throw new AtletaNaoContidoClubeOrigemException();
+		}
+		atleta.setClube(transferencia.getClubeOrigem());
+		atletaRepository.saveAndFlush(transferencia.getAtleta());	
+	}
+
 	@Override
 	public Transferencia obterPorId(Long id) {
 		Optional<Transferencia> transferencia = transferenciaRepository.obterPorId(id);
@@ -75,6 +84,16 @@ public class TransferenciaServiceImpl implements TransferenciaService {
 	@Override
 	public List<Transferencia> listar() {
 		return transferenciaRepository.listar();
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
+	public void excluir(Long id) {
+		Optional<Transferencia> transferencia = transferenciaRepository.obterPorId(id);
+		if (transferencia.isPresent()) {
+			desfazerAlteracaoClubeAtleta(transferencia.get());
+			transferenciaRepository.deleteById(id);
+		}
 	}
 
 }
