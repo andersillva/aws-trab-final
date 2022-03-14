@@ -51,13 +51,13 @@ public class AtletaServiceImpl implements AtletaService {
 
 	@Override
 	public Atleta obterPorId(Long id) {
-		Optional<Atleta> atleta = atletaRepository.findById(id);
+		Optional<Atleta> atleta = atletaRepository.obterPorId(id);
 		return atleta.orElseThrow(() -> new RegistroNaoEncontradoException());
 	}
 
 	@Override
 	public List<Atleta> listar() {
-		return atletaRepository.findAll();
+		return atletaRepository.listar();
 	}
 
 	@Override

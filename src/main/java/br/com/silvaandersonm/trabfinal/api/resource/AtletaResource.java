@@ -2,6 +2,7 @@ package br.com.silvaandersonm.trabfinal.api.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.silvaandersonm.trabfinal.api.dto.AtletaAlteracaoDTO;
+import br.com.silvaandersonm.trabfinal.api.dto.AtletaDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.AtletaInclusaoDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.AtletaPersistenciaDTO;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
@@ -39,19 +41,23 @@ public class AtletaResource {
 	private ClubeService clubeService;
 
 	@GetMapping("/atletas")
-	public ResponseEntity<List<Atleta>> listarAtletas() {
+	public ResponseEntity<List<AtletaDTO>> listarAtletas() {
 		List<Atleta> atletas = atletaService.listar();
 		if (atletas.size() > 0) {
-			return new ResponseEntity<>(atletas, HttpStatus.OK);
+			ModelMapper mapper = new ModelMapper();
+			List<AtletaDTO> atletasDTO = atletas.stream().map(a -> mapper.map(a, AtletaDTO.class)).collect(Collectors.toList());
+			return new ResponseEntity<>(atletasDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/atletas/{id}")
-	public ResponseEntity<Atleta> obterAtleta(@PathVariable("id") Long id) {
+	public ResponseEntity<AtletaDTO> obterAtleta(@PathVariable("id") Long id) {
 		Atleta atleta = atletaService.obterPorId(id);
-		return new ResponseEntity<>(atleta, HttpStatus.OK);
+		ModelMapper mapper = new ModelMapper();
+		AtletaDTO atletaDTO = mapper.map(atleta, AtletaDTO.class);
+		return new ResponseEntity<>(atletaDTO, HttpStatus.OK);
 	}
 
 	@PostMapping(path="/atletas", consumes=MediaType.APPLICATION_JSON_VALUE)

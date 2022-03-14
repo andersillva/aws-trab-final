@@ -2,9 +2,11 @@ package br.com.silvaandersonm.trabfinal.api.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.silvaandersonm.trabfinal.api.dto.AtletaClubeDTO;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
 import br.com.silvaandersonm.trabfinal.domain.service.ClubeService;
@@ -47,10 +50,12 @@ public class ClubeResource {
 	}
 
 	@GetMapping("/clubes/{id}/atletas")
-	public ResponseEntity<List<Atleta>> listarAtletas(@PathVariable("id") Long idClube) {
+	public ResponseEntity<List<AtletaClubeDTO>> listarAtletas(@PathVariable("id") Long idClube) {
 		List<Atleta> atletas = clubeService.listarAtletas(idClube);
+		ModelMapper mapper = new ModelMapper();
+		List<AtletaClubeDTO> atletasClubeDTO = atletas.stream().map(a -> mapper.map(a, AtletaClubeDTO.class)).collect(Collectors.toList());
 		if (atletas.size() > 0) {
-			return new ResponseEntity<>(atletas, HttpStatus.OK);
+			return new ResponseEntity<>(atletasClubeDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

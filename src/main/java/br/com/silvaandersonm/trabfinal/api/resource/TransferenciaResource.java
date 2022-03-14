@@ -2,6 +2,7 @@ package br.com.silvaandersonm.trabfinal.api.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.silvaandersonm.trabfinal.api.dto.TransferenciaAlteracaoDTO;
+import br.com.silvaandersonm.trabfinal.api.dto.TransferenciaDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.TransferenciaPersistenciaDTO;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
@@ -42,19 +44,25 @@ public class TransferenciaResource {
 	private AtletaService atletaService;
 
 	@GetMapping("/transferencias")
-	public ResponseEntity<List<Transferencia>> listarTransferencias() {
+	public ResponseEntity<List<TransferenciaDTO>> listarTransferencias() {
 		List<Transferencia> transferencias = transferenciaService.listar();
 		if (transferencias.size() > 0) {
-			return new ResponseEntity<>(transferencias, HttpStatus.OK);
+			ModelMapper mapper = new ModelMapper();
+			List<TransferenciaDTO> transferenciasDTO = transferencias.stream()
+					                                                 .map(t -> mapper.map(t, TransferenciaDTO.class))
+					                                                 .collect(Collectors.toList());
+			return new ResponseEntity<>(transferenciasDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@GetMapping("/transferencias/{id}")
-	public ResponseEntity<Transferencia> obterTransferencia(@PathVariable("id") Long id) {
+	public ResponseEntity<TransferenciaDTO> obterTransferencia(@PathVariable("id") Long id) {
 		Transferencia transferencia = transferenciaService.obterPorId(id);
-		return new ResponseEntity<>(transferencia, HttpStatus.OK);
+		ModelMapper mapper = new ModelMapper();
+		TransferenciaDTO transferenciaDTO = mapper.map(transferencia, TransferenciaDTO.class);
+		return new ResponseEntity<>(transferenciaDTO, HttpStatus.OK);
 	}
 
 	@PostMapping(path="/transferencias", consumes=MediaType.APPLICATION_JSON_VALUE)

@@ -68,13 +68,13 @@ public class TransferenciaServiceImpl implements TransferenciaService {
 
 	@Override
 	public Transferencia obterPorId(Long id) {
-		Optional<Transferencia> transferencia = transferenciaRepository.findById(id);
+		Optional<Transferencia> transferencia = transferenciaRepository.obterPorId(id);
 		return transferencia.orElseThrow(() -> new RegistroNaoEncontradoException());
 	}
 
 	@Override
 	public List<Transferencia> listar() {
-		return transferenciaRepository.findAll();
+		return transferenciaRepository.listar();
 	}
 
 }
