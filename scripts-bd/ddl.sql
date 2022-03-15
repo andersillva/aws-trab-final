@@ -58,3 +58,70 @@ ALTER TABLE transferencia
         REFERENCES atleta ( id_atleta );
 
 ------------------------------------------------
+CREATE TABLE torneio (
+	id_torneio	INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	nm_torneio	VARCHAR(30) NOT NULL,
+	nr_ano		INT NOT NULL,
+	dt_inicio	DATE NOT NULL,
+	dt_fim		DATE NOT NULL
+);
+
+ALTER TABLE torneio ADD CONSTRAINT torneio_uk UNIQUE ( nm_torneio, nr_ano );
+
+------------------------------------------------
+CREATE TABLE participante (
+	id_participante		INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id_torneio			INT NOT NULL,
+	id_clube			INT NOT NULL,
+	st_participante		VARCHAR(15) NOT NULL,
+	nr_pontos			INT NULL
+);
+
+ALTER TABLE participante ADD CONSTRAINT participante_uk UNIQUE ( id_torneio, id_clube );
+
+ALTER TABLE participante
+    ADD CONSTRAINT participante_torneio_fk FOREIGN KEY ( id_torneio )
+        REFERENCES torneio ( id_torneio );
+
+ALTER TABLE participante
+    ADD CONSTRAINT participante_clube_fk FOREIGN KEY ( id_clube )
+        REFERENCES clube ( id_clube );
+
+------------------------------------------------
+CREATE TABLE partida (
+	id_partida			INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id_torneio			INT NOT NULL,
+	id_clube_mandante	INT NOT NULL,
+	id_clube_visitante	INT NOT NULL,
+	dt_partida			DATE NOT NULL,
+	ds_local			VARCHAR(30) NOT NULL,
+	nr_placar_mandante	INT NULL,
+	nr_placar_visitante	INT NULL
+);
+
+ALTER TABLE partida ADD CONSTRAINT torneio_clube_uk UNIQUE ( id_torneio, id_clube_mandante, id_clube_visitante, dt_partida );
+
+ALTER TABLE partida
+    ADD CONSTRAINT partida_torneio_fk FOREIGN KEY ( id_torneio )
+        REFERENCES torneio ( id_torneio );
+
+ALTER TABLE partida
+    ADD CONSTRAINT partida_clube_mand_fk FOREIGN KEY ( id_clube_mandante )
+        REFERENCES clube ( id_clube );
+
+ALTER TABLE partida
+    ADD CONSTRAINT partida_clube_vis_fk FOREIGN KEY ( id_clube_visitante )
+        REFERENCES clube ( id_clube );
+
+------------------------------------------------
+CREATE TABLE evento (
+	id_evento			INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id_partida			INT NOT NULL,
+	tp_evento			VARCHAR(15) NOT NULL,
+	ds_evento			VARCHAR(60) NOT NULL,
+	dt_evento			DATE NOT NULL
+);
+
+ALTER TABLE evento
+    ADD CONSTRAINT evento_partida_fk FOREIGN KEY ( id_partida )
+        REFERENCES partida ( id_partida );

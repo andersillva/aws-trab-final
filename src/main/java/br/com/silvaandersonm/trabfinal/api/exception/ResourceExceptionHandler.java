@@ -55,7 +55,8 @@ public class ResourceExceptionHandler {
 			RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), "Registro não pode ser excluído, pois possui dependências."); 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
 	    } else {
-	    	RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.");
+	    	//RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.");
+	    	RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resposta);
 	    }
 

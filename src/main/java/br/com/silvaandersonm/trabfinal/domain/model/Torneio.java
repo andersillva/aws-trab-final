@@ -14,32 +14,29 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
-@Table(name="clube")
+@Table(name="torneio")
 @Data
-public class Clube {
+public class Torneio {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="id_clube", nullable=false)
+	@Column(name="id_torneio", nullable=false)
 	private Long id;
 
-	@Column(name="nm_clube", length=60, nullable=false)
+	@Column(name="nm_torneio", length=30, nullable=false)
 	@NotBlank
 	private String nome;
 
-	@Column(name="nm_cidade", length=60, nullable=false)
-	@NotBlank
-	private String cidade;
-
-	@Column(name="sg_uf", length=2, nullable=false)
-	@NotBlank
-	private String uf;
-
-	@Column(name="dt_fundacao", nullable=false)
+	@Column(name="nr_ano", nullable=false)
 	@NotNull
-	private Date dataFundacao;
+	private Integer ano;
 
-	@Column(name="nm_estadio", length=30, nullable=true)
-	private String estadio;
+	@Column(name="dt_inicio", nullable=false)
+	@NotNull
+	private Date dataInicio;
+
+	@Column(name="dt_fim", nullable=false)
+	@NotNull
+	private Date dataFim;
 
 }

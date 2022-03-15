@@ -1,6 +1,5 @@
 package br.com.silvaandersonm.trabfinal.domain.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -17,40 +16,42 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
-@Table(name="transferencia")
+@Table(name="partida")
 @Data
-public class Transferencia {
+public class Partida {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="id_transferencia", nullable=false)
+	@Column(name="id_partida", nullable=false)
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "id_clube_origem", nullable=false)
+	@JoinColumn(name = "id_torneio", nullable=false)
 	@NotNull
-	private Clube clubeOrigem;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_clube_destino", nullable=false)
-	@NotNull
-	private Clube clubeDestino;
+	private Torneio torneio;
 
 	@ManyToOne
-	@JoinColumn(name = "id_atleta", nullable=false)
+	@JoinColumn(name = "id_clube_mandante", nullable=false)
 	@NotNull
-	private Atleta atleta;
+	private Clube clubeMandante;
 
-	@Column(name="dt_transferencia", nullable=false)
+	@ManyToOne
+	@JoinColumn(name = "id_clube_visitante", nullable=false)
+	@NotNull
+	private Clube clubeVisitante;
+
+	@Column(name="dt_partida", nullable=false)
 	@NotNull
 	private Date data;
 
-	@Column(name="vl_transferencia", nullable=false)
-	@NotNull
-	private BigDecimal valor;
-
-	@Column(name="ds_moeda", nullable=false)
+	@Column(name="ds_local", length=30, nullable=false)
 	@NotBlank
-	private String moeda;
+	private String local;
+
+	@Column(name="nr_placar_mandante", nullable=true)
+	private Integer placarMandante;
+
+	@Column(name="nr_placar_visitante", nullable=true)
+	private Integer placarVisitante;
 
 }

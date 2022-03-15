@@ -59,9 +59,9 @@ public class ClubeResource {
 	@GetMapping("/clubes/{id}/atletas")
 	public ResponseEntity<List<ClubeAtletaDTO>> listarAtletas(@PathVariable("id") Long idClube) {
 		List<Atleta> atletas = clubeService.listarAtletas(idClube);
-		ModelMapper mapper = new ModelMapper();
-		List<ClubeAtletaDTO> clubeAtletaDTO = atletas.stream().map(a -> mapper.map(a, ClubeAtletaDTO.class)).collect(Collectors.toList());
 		if (atletas.size() > 0) {
+			ModelMapper mapper = new ModelMapper();
+			List<ClubeAtletaDTO> clubeAtletaDTO = atletas.stream().map(a -> mapper.map(a, ClubeAtletaDTO.class)).collect(Collectors.toList());
 			return new ResponseEntity<>(clubeAtletaDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
