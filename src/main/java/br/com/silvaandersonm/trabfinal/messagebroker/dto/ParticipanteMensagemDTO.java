@@ -1,19 +1,20 @@
-package br.com.silvaandersonm.trabfinal.api.dto;
-
-import javax.validation.constraints.NotNull;
+package br.com.silvaandersonm.trabfinal.messagebroker.dto;
 
 import br.com.silvaandersonm.trabfinal.domain.enumerator.SituacaoParticipante;
 import lombok.Data;
 
 @Data
-public class ParticipanteInclusaoDTO {
+public class ParticipanteMensagemDTO {
 
-	@NotNull
+	private Long id;
+
 	private Long idClube;
 
-	@NotNull
 	private SituacaoParticipante situacao;
 
 	private Integer pontuacao;
 
+	private Integer idTorneio;
+
 }
+

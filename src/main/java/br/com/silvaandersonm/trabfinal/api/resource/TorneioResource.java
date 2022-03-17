@@ -231,12 +231,9 @@ public class TorneioResource {
 	}
 
 	@Operation(summary = "Adiciona um novo evento em uma partida.")
-	@ApiResponses(value = { 
-	  @ApiResponse(responseCode="201", description="Evento criado com sucesso."),
-	  @ApiResponse(responseCode="400",
-	               description="Parâmetros não informados ou com valores inválidos.",
-	               content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class)) }), 
-	  @ApiResponse(responseCode="404", description="Partida ou tipo de evento não encontrado.", content=@Content) })
+	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Evento criado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
+						   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}), 
+						   @ApiResponse(responseCode="404", description="Partida ou tipo de evento não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PostMapping(path="/torneios/{id}/partidas/{id-partida}/eventos/{tipo-evento}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirEvento(@PathVariable("id") Long id,
 			                                  @PathVariable("id-partida") Long idPartida,
@@ -255,6 +252,9 @@ public class TorneioResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@Operation(summary = "Obtém um evento a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="404", description="Evento não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/torneios/{id}/partidas/{id-partida}/eventos/{id-evento}")
 	public ResponseEntity<EventoDTO> obterEvento(@PathVariable("id") Long id,
 												 @PathVariable("id-partida") Long idPartida,
@@ -265,9 +265,15 @@ public class TorneioResource {
 		return new ResponseEntity<>(eventoDTO, HttpStatus.OK);
 	}
 
+	@Operation(summary = "Obtém a lista de eventos de uma partida.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="204", description="Partida não possui nenhum evento."),
+						   @ApiResponse(responseCode="404", description="Torneio ou partida não encontrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/torneios/{id}/partidas/{id-partida}/eventos")
 	public ResponseEntity<List<EventoDTO>> listarEventos(@PathVariable("id") Long id,
 			 											 @PathVariable("id-partida") Long idPartida) {
+		torneioService.obterPorId(id);
+		partidaService.obterPorId(idPartida);
 		List<Evento> eventos = eventoService.listarPorPartida(idPartida);
 		if (eventos.size() > 0) {
 			ModelMapper mapper = new ModelMapper();

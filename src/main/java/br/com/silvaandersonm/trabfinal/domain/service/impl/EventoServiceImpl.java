@@ -15,6 +15,7 @@ import br.com.silvaandersonm.trabfinal.domain.service.EventoService;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.ParametroRequeridoException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.RegistroDuplicadoException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.RegistroNaoEncontradoException;
+import br.com.silvaandersonm.trabfinal.messagebroker.EventoBroker;
 
 @Service
 public class EventoServiceImpl implements EventoService {
@@ -22,11 +23,15 @@ public class EventoServiceImpl implements EventoService {
 	@Autowired
 	private EventoRepository eventoRepository;
 
+	@Autowired
+	private EventoBroker eventoBroker;
+
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void incluir(Evento evento) {
 		evento.setId(null);
 		salvar(evento);
+		eventoBroker.gerarMensagemInclusao(evento);
 	}
 
 	@Override

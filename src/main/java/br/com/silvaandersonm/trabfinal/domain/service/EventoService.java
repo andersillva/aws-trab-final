@@ -6,9 +6,9 @@ import br.com.silvaandersonm.trabfinal.domain.model.Evento;
 
 public interface EventoService {
 
-	public void incluir(Evento partida);
+	public void incluir(Evento evento);
 
-	public void alterar(Evento partida);
+	public void alterar(Evento evento);
 
 	public Evento obterPorId(Long id);
 
