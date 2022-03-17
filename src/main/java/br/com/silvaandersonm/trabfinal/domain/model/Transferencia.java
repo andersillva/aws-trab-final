@@ -1,7 +1,7 @@
 package br.com.silvaandersonm.trabfinal.domain.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,7 +43,7 @@ public class Transferencia {
 
 	@Column(name="dt_transferencia", nullable=false)
 	@NotNull
-	private Date data;
+	private LocalDate data;
 
 	@Column(name="vl_transferencia", nullable=false)
 	@NotNull

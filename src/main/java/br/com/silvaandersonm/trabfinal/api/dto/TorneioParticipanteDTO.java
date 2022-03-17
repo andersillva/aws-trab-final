@@ -1,5 +1,6 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
+import br.com.silvaandersonm.trabfinal.domain.enumerator.SituacaoParticipante;
 import lombok.Data;
 
 @Data
@@ -9,7 +10,7 @@ public class TorneioParticipanteDTO {
 
 	private ClubeResumoDTO clube;
 
-	private String situacao;
+	private SituacaoParticipante situacao;
 
 	private Integer pontuacao;
 

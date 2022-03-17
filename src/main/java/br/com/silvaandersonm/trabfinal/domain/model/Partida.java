@@ -1,9 +1,11 @@
 package br.com.silvaandersonm.trabfinal.domain.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import br.com.silvaandersonm.trabfinal.domain.enumerator.SituacaoPartida;
 import lombok.Data;
 
 @Entity
@@ -42,11 +45,16 @@ public class Partida {
 
 	@Column(name="dt_partida", nullable=false)
 	@NotNull
-	private Date data;
+	private LocalDate data;
 
 	@Column(name="ds_local", length=30, nullable=false)
 	@NotBlank
 	private String local;
+
+	@Column(name="st_partida", length=15, nullable=false)
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	private SituacaoPartida situacao;
 
 	@Column(name="nr_placar_mandante", nullable=true)
 	private Integer placarMandante;

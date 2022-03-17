@@ -1,6 +1,6 @@
 package br.com.silvaandersonm.trabfinal.domain.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,10 +33,10 @@ public class Torneio {
 
 	@Column(name="dt_inicio", nullable=false)
 	@NotNull
-	private Date dataInicio;
+	private LocalDate dataInicio;
 
 	@Column(name="dt_fim", nullable=false)
 	@NotNull
-	private Date dataFim;
+	private LocalDate dataFim;
 
 }

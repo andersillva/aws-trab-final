@@ -1,6 +1,6 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -20,7 +20,7 @@ public class ClubePersistenciaDTO {
 	private String uf;
 
 	@NotNull
-	private Date dataFundacao;
+	private LocalDate dataFundacao;
 
 	private String estadio;
 

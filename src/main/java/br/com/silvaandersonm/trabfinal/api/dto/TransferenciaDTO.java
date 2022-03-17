@@ -1,7 +1,7 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -16,7 +16,7 @@ public class TransferenciaDTO {
 	
 	private ClubeAtletaDTO atleta;
 
-	private Date data;
+	private LocalDate data;
 
 	private BigDecimal valor;
 

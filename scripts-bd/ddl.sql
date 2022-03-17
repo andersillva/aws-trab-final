@@ -95,6 +95,7 @@ CREATE TABLE partida (
 	id_clube_visitante	INT NOT NULL,
 	dt_partida			DATE NOT NULL,
 	ds_local			VARCHAR(30) NOT NULL,
+	st_partida			VARCHAR(15) NOT NULL,
 	nr_placar_mandante	INT NULL,
 	nr_placar_visitante	INT NULL
 );
@@ -119,7 +120,7 @@ CREATE TABLE evento (
 	id_partida			INT NOT NULL,
 	tp_evento			VARCHAR(15) NOT NULL,
 	ds_evento			VARCHAR(60) NOT NULL,
-	dt_evento			DATE NOT NULL
+	dt_evento			DATETIME NOT NULL
 );
 
 ALTER TABLE evento

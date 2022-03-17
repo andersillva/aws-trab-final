@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.silvaandersonm.trabfinal.api.VersaoAPI;
 import br.com.silvaandersonm.trabfinal.api.dto.ClubeAtletaDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.ClubeDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.ClubePersistenciaDTO;
@@ -30,7 +31,7 @@ import br.com.silvaandersonm.trabfinal.domain.model.Clube;
 import br.com.silvaandersonm.trabfinal.domain.service.ClubeService;
 
 @RestController
-@RequestMapping(path="/api/v1", produces=MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path=VersaoAPI.URI_BASE_V1, produces=MediaType.APPLICATION_JSON_VALUE)
 public class ClubeResource {
 
 	@Autowired

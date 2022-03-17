@@ -9,46 +9,61 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.com.silvaandersonm.trabfinal.domain.service.exception.AtletaNaoContidoClubeOrigemException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.ParametroRequeridoException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.RegistroDuplicadoException;
 import br.com.silvaandersonm.trabfinal.domain.service.exception.RegistroNaoEncontradoException;
+import br.com.silvaandersonm.trabfinal.domain.service.exception.ValorForaDominioException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
 	@ExceptionHandler(RegistroNaoEncontradoException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ResponseEntity<RespostaPadraoInsucesso> responderErro(RegistroNaoEncontradoException e, HttpServletRequest request){
 		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.NOT_FOUND.value(), e.getMessage()); 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<RespostaPadraoInsucesso> responderErro(MethodArgumentNotValidException e, HttpServletRequest request){
 		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), "Parâmetro(s) obrigatório(s) não informado(s)."); 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
 	}
 
 	@ExceptionHandler(ParametroRequeridoException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<RespostaPadraoInsucesso> responderErro(ParametroRequeridoException e, HttpServletRequest request){
 		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
 	}
 
 	@ExceptionHandler(RegistroDuplicadoException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<RespostaPadraoInsucesso> responderErro(RegistroDuplicadoException e, HttpServletRequest request){
 		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
 	}
 
 	@ExceptionHandler(AtletaNaoContidoClubeOrigemException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<RespostaPadraoInsucesso> responderErro(AtletaNaoContidoClubeOrigemException e, HttpServletRequest request){
 		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
 	}
 
+	@ExceptionHandler(ValorForaDominioException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<RespostaPadraoInsucesso> responderErro(ValorForaDominioException e, HttpServletRequest request){
+		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
+	}
+
 	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<RespostaPadraoInsucesso> responderErro(Exception e, HttpServletRequest request){
 		Throwable resultCause = getResultCause(e);
 	    if (resultCause instanceof SQLIntegrityConstraintViolationException) {

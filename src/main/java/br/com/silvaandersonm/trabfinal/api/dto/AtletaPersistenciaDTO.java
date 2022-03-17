@@ -1,6 +1,6 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,7 +17,7 @@ public class AtletaPersistenciaDTO {
 	private String nomeCompleto;
 
 	@NotNull
-	private Date dataNascimento;
+	private LocalDate dataNascimento;
 
 	@NotBlank
 	private String cidadeNascimento;

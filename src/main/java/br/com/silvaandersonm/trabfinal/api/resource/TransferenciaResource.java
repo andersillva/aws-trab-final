@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.silvaandersonm.trabfinal.api.VersaoAPI;
 import br.com.silvaandersonm.trabfinal.api.dto.TransferenciaAlteracaoDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.TransferenciaDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.TransferenciaInclusaoDTO;
@@ -32,7 +33,7 @@ import br.com.silvaandersonm.trabfinal.domain.service.ClubeService;
 import br.com.silvaandersonm.trabfinal.domain.service.TransferenciaService;
 
 @RestController
-@RequestMapping(path="/api/v1", produces=MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path=VersaoAPI.URI_BASE_V1, produces=MediaType.APPLICATION_JSON_VALUE)
 public class TransferenciaResource {
 
 	@Autowired

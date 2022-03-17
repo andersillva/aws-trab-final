@@ -1,6 +1,6 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -13,8 +13,8 @@ public class TorneioDTO {
 
 	private Integer ano;
 
-	private Date dataInicio;
+	private LocalDate dataInicio;
 
-	private Date dataFim;
+	private LocalDate dataFim;
 
 }

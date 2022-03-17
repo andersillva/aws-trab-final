@@ -1,6 +1,6 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,9 +17,9 @@ public class TorneioPersistenciaDTO {
 	private Integer ano;
 
 	@NotNull
-	private Date dataInicio;
+	private LocalDate dataInicio;
 
 	@NotNull
-	private Date dataFim;
+	private LocalDate dataFim;
 
 }

@@ -1,6 +1,6 @@
 package br.com.silvaandersonm.trabfinal.domain.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +35,7 @@ public class Atleta {
 
 	@Column(name="dt_nascimento", nullable=false)
 	@NotNull
-	private Date dataNascimento;
+	private LocalDate dataNascimento;
 
 	@Column(name="nm_cidade_nascimento", length=60, nullable=false)
 	@NotBlank

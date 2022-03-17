@@ -1,6 +1,6 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -15,7 +15,7 @@ public class ClubeDTO {
 
 	private String uf;
 
-	private Date dataFundacao;
+	private LocalDate dataFundacao;
 
 	private String estadio;
 

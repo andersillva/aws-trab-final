@@ -1,10 +1,11 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import br.com.silvaandersonm.trabfinal.domain.enumerator.SituacaoPartida;
 import lombok.Data;
 
 @Data
@@ -17,12 +18,16 @@ public class PartidaPersistenciaDTO {
 	private Long idClubeVisitante;
 
 	@NotNull
-	private Date data;
+	private LocalDate data;
 
 	@NotBlank
 	private String local;
 
+	@NotNull
+	private SituacaoPartida situacao;
+
 	private Integer placarMandante;
 
 	private Integer placarVisitante;
+
 }

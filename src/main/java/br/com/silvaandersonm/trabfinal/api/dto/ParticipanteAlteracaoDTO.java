@@ -1,14 +1,15 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import br.com.silvaandersonm.trabfinal.domain.enumerator.SituacaoParticipante;
 import lombok.Data;
 
 @Data
 public class ParticipanteAlteracaoDTO {
 
-	@NotBlank
-	private String situacao;
+	@NotNull
+	private SituacaoParticipante situacao;
 
 	private Integer pontuacao;
 }

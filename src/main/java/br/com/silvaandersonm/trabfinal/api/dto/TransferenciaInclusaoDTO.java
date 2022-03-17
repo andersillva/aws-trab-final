@@ -1,7 +1,7 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -21,7 +21,7 @@ public class TransferenciaInclusaoDTO {
 	private Long idAtleta;
 
 	@NotNull
-	private Date data;
+	private LocalDate data;
 
 	@NotNull
 	private BigDecimal valor;

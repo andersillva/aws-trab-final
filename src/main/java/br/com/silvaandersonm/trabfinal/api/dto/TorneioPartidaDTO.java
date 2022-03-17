@@ -1,7 +1,10 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import br.com.silvaandersonm.trabfinal.domain.enumerator.SituacaoPartida;
 import lombok.Data;
 
 @Data
@@ -13,11 +16,17 @@ public class TorneioPartidaDTO {
 
 	private ClubeResumoDTO visitante;
 
-	private Date data;
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", locale = "UTC-03")
+	private LocalDate data;
 
 	private String local;
 
+	private SituacaoPartida situacao;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer placarMandante;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer placarVisitante;
+
 }

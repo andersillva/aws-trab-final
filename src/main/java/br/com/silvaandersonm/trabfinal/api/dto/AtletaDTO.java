@@ -1,6 +1,6 @@
 package br.com.silvaandersonm.trabfinal.api.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -15,7 +15,7 @@ public class AtletaDTO {
 
 	private String nomeCompleto;
 
-	private Date dataNascimento;
+	private LocalDate dataNascimento;
 
 	private String cidadeNascimento;
 
