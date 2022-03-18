@@ -45,6 +45,8 @@ CREATE TABLE transferencia (
 	ds_moeda			VARCHAR(10) NOT NULL
 );
 
+ALTER TABLE transferencia ADD CONSTRAINT trans_uk UNIQUE ( id_clube_origem, id_clube_destino, id_atleta, dt_transferencia );
+
 ALTER TABLE transferencia
     ADD CONSTRAINT trans_clube_orig_fk FOREIGN KEY ( id_clube_origem )
         REFERENCES clube ( id_clube );
@@ -133,7 +135,8 @@ CREATE TABLE usuario (
 	nm_usuario			VARCHAR(60) NOT NULL,
 	nm_login			VARCHAR(30) NOT NULL,
 	ds_senha			VARCHAR(100) NOT NULL,
-	st_usuario			VARCHAR(10) NOT NULL
+	st_usuario			VARCHAR(10) NOT NULL,
+	tp_perfil			VARCHAR(15) NOT NULL
 );
 
 ALTER TABLE usuario ADD CONSTRAINT usuario_uk UNIQUE ( nm_login );

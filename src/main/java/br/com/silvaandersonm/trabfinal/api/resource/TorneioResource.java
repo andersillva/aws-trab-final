@@ -71,6 +71,9 @@ public class TorneioResource {
 	@Autowired
 	private ClubeService clubeService;
 
+	@Operation(summary = "Obtém a lista de torneios.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="204", description="Não existe nenhum torneio cadastrado.")})
 	@GetMapping("/torneios")
 	public ResponseEntity<List<TorneioResumoDTO>> listarTorneios() {
 		List<Torneio> torneios = torneioService.listar();
@@ -83,6 +86,9 @@ public class TorneioResource {
 		}
 	}
 
+	@Operation(summary = "Obtém um torneio a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="404", description="Torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/torneios/{id}")
 	public ResponseEntity<TorneioDTO> obterTorneio(@PathVariable("id") Long id) {
 		Torneio torneio = torneioService.obterPorId(id);
@@ -91,6 +97,9 @@ public class TorneioResource {
 		return new ResponseEntity<>(torneioDTO, HttpStatus.OK);
 	}
 
+	@Operation(summary = "Cria um novo torneio.")
+	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Torneio criado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
+						   @ApiResponse(responseCode="400", description="Parâmetros não informados, parâmetros com valores inválidos, ou registro já existente.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PostMapping(path="/torneios", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirTorneio(@Valid @RequestBody TorneioPersistenciaDTO torneioPersistenciaDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -100,6 +109,10 @@ public class TorneioResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@Operation(summary = "Altera um torneio existente a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Torneio alterado com sucesso."),
+						   @ApiResponse(responseCode="400", description="Parâmetros não informados, parâmetros com valores inválidos, ou registro já existente.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}),
+						   @ApiResponse(responseCode="404", description="Torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PutMapping(path="/torneios/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarTorneio(@PathVariable("id") Long id, @Valid @RequestBody TorneioPersistenciaDTO torneioPersistenciaDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -109,12 +122,19 @@ public class TorneioResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@Operation(summary = "Exclui um torneio existente a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Torneio excluído com sucesso."),
+						   @ApiResponse(responseCode="400", description="Torneio não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@DeleteMapping("/torneios/{id}")
 	public ResponseEntity<Void> excluirTorneio(@PathVariable("id") Long id) {
 		torneioService.excluir(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@Operation(summary = "Obtém a lista de clubes participantes a partir do ID de um torneio.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="204", description="Torneio não possui nenhum participante."),
+						   @ApiResponse(responseCode="404", description="Torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/torneios/{id}/participantes")
 	public ResponseEntity<List<TorneioParticipanteDTO>> listarParticipantes(@PathVariable("id") Long idTorneio) {
 		List<Participante> participantes = participanteService.listarPorTorneio(idTorneio);
@@ -127,6 +147,9 @@ public class TorneioResource {
 		}
 	}
 
+	@Operation(summary = "Obtém um clube participante de um torneio a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="404", description="Participante ou torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/torneios/{id}/participantes/{id-clube}")
 	public ResponseEntity<TorneioParticipanteDTO> obterParticipante(@PathVariable("id") Long id,
 												  			   		@PathVariable("id-clube") Long idClube) {
@@ -136,6 +159,10 @@ public class TorneioResource {
 		return new ResponseEntity<>(torneioParticipanteDTO, HttpStatus.OK);
 	}
 
+	@Operation(summary = "Adiciona um novo participante em um torneio.")
+	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Participante adicionado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
+						   @ApiResponse(responseCode="400", description="Parâmetros não informado, parâmetros com valores inválidos, ou registro já existente.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}), 
+						   @ApiResponse(responseCode="404", description="Clube ou torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PostMapping(path="/torneios/{id}/participantes", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirParticipante(@PathVariable("id") Long id, @Valid @RequestBody ParticipanteInclusaoDTO participanteInclusaoDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -149,6 +176,10 @@ public class TorneioResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@Operation(summary = "Altera um participante de um torneio a partir de seu ID de clube.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Participante alterado com sucesso."),
+						   @ApiResponse(responseCode="400", description="Parâmetros não informados, parâmetros com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}),
+						   @ApiResponse(responseCode="404", description="Participante ou torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PutMapping(path="/torneios/{id}/participantes/{id-clube}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarParticipante(@PathVariable("id") Long id, 
 			                                        @PathVariable("id-clube") Long idClube, 
@@ -161,12 +192,19 @@ public class TorneioResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@Operation(summary = "Remove um participante de um torneio a partir de seu ID de clube.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Participante excluído com sucesso."),
+						   @ApiResponse(responseCode="400", description="Participante não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@DeleteMapping("/torneios/{id}/participantes/{id-clube}")
 	public ResponseEntity<Void> excluirParticipante(@PathVariable("id") Long id, @PathVariable("id-clube") Long idClube) {
 		participanteService.excluir(id, idClube);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@Operation(summary = "Obtém a lista de partidas a partir do ID de um torneio.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="204", description="Torneio não possui nenhuma partida."),
+						   @ApiResponse(responseCode="404", description="Torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/torneios/{id}/partidas")
 	public ResponseEntity<List<TorneioPartidaDTO>> listarPartidas(@PathVariable("id") Long idTorneio) {
 		List<Partida> partidas = partidaService.listarPorTorneio(idTorneio);
@@ -179,15 +217,22 @@ public class TorneioResource {
 		}
 	}
 
+	@Operation(summary = "Obtém uma partida de um torneio a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="404", description="Partida ou torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/torneios/{id}/partidas/{id-partida}")
 	public ResponseEntity<TorneioPartidaDTO> obterPartida(@PathVariable("id") Long id,
-												  @PathVariable("id-partida") Long idPartida) {
+												  		  @PathVariable("id-partida") Long idPartida) {
 		Partida partida = partidaService.obterPorId(idPartida);
 		ModelMapper mapper = new ModelMapper();
 		TorneioPartidaDTO torneioPartidaDTO = mapper.map(partida, TorneioPartidaDTO.class);
 		return new ResponseEntity<>(torneioPartidaDTO, HttpStatus.OK);
 	}
 
+	@Operation(summary = "Adiciona uma nova partida em um torneio.")
+	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Partida criada com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
+						   @ApiResponse(responseCode="400", description="Parâmetros não informado, parâmetros com valores inválidos, ou registro já existente.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}), 
+						   @ApiResponse(responseCode="404", description="Clube ou torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PostMapping(path="/torneios/{id}/partidas", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirPartida(@PathVariable("id") Long id, @Valid @RequestBody PartidaPersistenciaDTO partidaPersistenciaDTO) {
 		Partida partida = mapearPartida(partidaPersistenciaDTO, id);
@@ -196,6 +241,10 @@ public class TorneioResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@Operation(summary = "Altera uma partida de um torneio a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Partida alterado com sucesso."),
+						   @ApiResponse(responseCode="400", description="Parâmetros não informado, parâmetros com valores inválidos, ou registro já existente.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}),
+						   @ApiResponse(responseCode="404", description="Partida, clube ou torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PutMapping(path="/torneios/{id}/partidas/{id-partida}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarPartida(@PathVariable("id") Long id, 
 			                                   @PathVariable("id-partida") Long idPartida, 
@@ -224,6 +273,9 @@ public class TorneioResource {
 		return partida;
 	}
 
+	@Operation(summary = "Remove uma partida de um torneio a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Partida excluída com sucesso."),
+						   @ApiResponse(responseCode="400", description="Partida não pode ser excluída, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@DeleteMapping("/torneios/{id}/partidas/{id-partida}")
 	public ResponseEntity<Void> excluirPartida(@PathVariable("id") Long id, @PathVariable("id-partida") Long idPartida) {
 		partidaService.excluir(idPartida);
@@ -233,7 +285,7 @@ public class TorneioResource {
 	@Operation(summary = "Adiciona um novo evento em uma partida.")
 	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Evento criado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
 						   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}), 
-						   @ApiResponse(responseCode="404", description="Partida ou tipo de evento não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+						   @ApiResponse(responseCode="404", description="Tipo de evento, partida ou torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PostMapping(path="/torneios/{id}/partidas/{id-partida}/eventos/{tipo-evento}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirEvento(@PathVariable("id") Long id,
 			                                  @PathVariable("id-partida") Long idPartida,
@@ -254,7 +306,7 @@ public class TorneioResource {
 
 	@Operation(summary = "Obtém um evento a partir de seu ID.")
 	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="404", description="Evento não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+						   @ApiResponse(responseCode="404", description="Evento, partida ou torneio não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/torneios/{id}/partidas/{id-partida}/eventos/{id-evento}")
 	public ResponseEntity<EventoDTO> obterEvento(@PathVariable("id") Long id,
 												 @PathVariable("id-partida") Long idPartida,

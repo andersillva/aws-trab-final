@@ -26,9 +26,15 @@ import br.com.silvaandersonm.trabfinal.api.dto.ClubeAtletaDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.ClubeDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.ClubePersistenciaDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.ClubeResumoDTO;
+import br.com.silvaandersonm.trabfinal.api.exception.RespostaPadraoInsucesso;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
 import br.com.silvaandersonm.trabfinal.domain.service.ClubeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping(path=VersaoAPI.URI_BASE_V1, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -37,6 +43,9 @@ public class ClubeResource {
 	@Autowired
 	private ClubeService clubeService;
 
+	@Operation(summary = "Obtém a lista de clubes.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="204", description="Não existe nenhum clube cadastrado.")})
 	@GetMapping("/clubes")
 	public ResponseEntity<List<ClubeResumoDTO>> listarClubes() {
 		List<Clube> clubes = clubeService.listar();
@@ -49,6 +58,9 @@ public class ClubeResource {
 		}
 	}
 
+	@Operation(summary = "Obtém um clube a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="404", description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/clubes/{id}")
 	public ResponseEntity<ClubeDTO> obterClube(@PathVariable("id") Long id) {
 		Clube clube = clubeService.obterPorId(id);
@@ -57,6 +69,10 @@ public class ClubeResource {
 		return new ResponseEntity<>(clubeDTO, HttpStatus.OK);
 	}
 
+	@Operation(summary = "Obtém a lista de atletas a partir do ID de um clube.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="204", description="Clube não possui nenhum atleta."),
+						   @ApiResponse(responseCode="404", description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@GetMapping("/clubes/{id}/atletas")
 	public ResponseEntity<List<ClubeAtletaDTO>> listarAtletas(@PathVariable("id") Long idClube) {
 		List<Atleta> atletas = clubeService.listarAtletas(idClube);
@@ -69,6 +85,9 @@ public class ClubeResource {
 		}
 	}
 
+	@Operation(summary = "Cria um novo clube.")
+	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Clube criado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
+						   @ApiResponse(responseCode="400", description="Parâmetros não informados, parâmetros com valores inválidos, ou registro já existente.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PostMapping(path="/clubes", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirClube(@Valid @RequestBody ClubePersistenciaDTO clubePersistenciaDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -78,6 +97,10 @@ public class ClubeResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@Operation(summary = "Altera um clube existente a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Clube alterado com sucesso."),
+			   			   @ApiResponse(responseCode="400", description="Parâmetros não informados, parâmetros com valores inválidos, ou registro já existente.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}),
+			   			   @ApiResponse(responseCode="404", description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@PutMapping(path="/clubes/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarClube(@PathVariable("id") Long id, @Valid @RequestBody ClubePersistenciaDTO clubePersistenciaDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -87,6 +110,9 @@ public class ClubeResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@Operation(summary = "Exclui um clube existente a partir de seu ID.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Clube excluído com sucesso."),
+						   @ApiResponse(responseCode="400", description="Clube não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
 	@DeleteMapping("/clubes/{id}")
 	public ResponseEntity<Void> excluirClube(@PathVariable("id") Long id) {
 		clubeService.excluir(id);
