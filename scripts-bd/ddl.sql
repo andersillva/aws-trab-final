@@ -1,4 +1,4 @@
-create database aws-trab-final;
+create database aws_trab_final;
 create user usr_aws_trab_final@localhost identified by 'usr_aws_trab_final';
 grant all privileges on aws_trab_final.* to 'usr_aws_trab_final'@'localhost';
 
