@@ -126,3 +126,14 @@ CREATE TABLE evento (
 ALTER TABLE evento
     ADD CONSTRAINT evento_partida_fk FOREIGN KEY ( id_partida )
         REFERENCES partida ( id_partida );
+
+------------------------------------------------
+CREATE TABLE usuario (
+	id_usuario			INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	nm_usuario			VARCHAR(60) NOT NULL,
+	nm_login			VARCHAR(30) NOT NULL,
+	ds_senha			VARCHAR(100) NOT NULL,
+	st_usuario			VARCHAR(10) NOT NULL
+);
+
+ALTER TABLE usuario ADD CONSTRAINT usuario_uk UNIQUE ( nm_login );
