@@ -26,7 +26,7 @@ import br.com.silvaandersonm.trabfinal.api.dto.AtletaDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.AtletaInclusaoDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.AtletaPersistenciaDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.AtletaResumoDTO;
-import br.com.silvaandersonm.trabfinal.api.exception.RespostaPadraoInsucesso;
+import br.com.silvaandersonm.trabfinal.api.exception.RespostaPadraoErro;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
 import br.com.silvaandersonm.trabfinal.domain.service.AtletaService;
@@ -64,7 +64,7 @@ public class AtletaResource {
 
 	@Operation(summary = "Obtém um atleta a partir de seu ID.")
 	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="404", description="Atleta não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+						   @ApiResponse(responseCode="404", description="Atleta não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@GetMapping("/atletas/{id}")
 	public ResponseEntity<AtletaDTO> obterAtleta(@PathVariable("id") Long id) {
 		Atleta atleta = atletaService.obterPorId(id);
@@ -75,8 +75,8 @@ public class AtletaResource {
 
 	@Operation(summary = "Cria um novo atleta.")
 	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Atleta criado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
-						   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}),
-						   @ApiResponse(responseCode="404", description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+						   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+						   @ApiResponse(responseCode="404", description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/atletas", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirAtleta(@Valid @RequestBody AtletaInclusaoDTO atletaInclusaoDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -90,8 +90,8 @@ public class AtletaResource {
 
 	@Operation(summary = "Altera um atleta existente a partir de seu ID.")
 	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Atleta alterado com sucesso."),
-			   			   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}),
-			   			   @ApiResponse(responseCode="404", description="Atleta ou clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+			   			   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+			   			   @ApiResponse(responseCode="404", description="Atleta ou clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PutMapping(path="/atletas/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarAtleta(@PathVariable("id") Long id, @Valid @RequestBody AtletaPersistenciaDTO atletaPersistenciaDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -105,7 +105,7 @@ public class AtletaResource {
 
 	@Operation(summary = "Exclui um atleta existente a partir de seu ID.")
 	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Atleta excluído com sucesso."),
-						   @ApiResponse(responseCode="400", description="Atleta não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+						   @ApiResponse(responseCode="409", description="Atleta não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@DeleteMapping("/atletas/{id}")
 	public ResponseEntity<Void> excluirAtleta(@PathVariable("id") Long id) {
 		atletaService.excluir(id);

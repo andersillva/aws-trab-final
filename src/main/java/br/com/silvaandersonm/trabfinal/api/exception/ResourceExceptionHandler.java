@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.com.silvaandersonm.trabfinal.domain.service.exception.AtletaNaoContidoClubeOrigemException;
@@ -22,56 +23,70 @@ public class ResourceExceptionHandler {
 
 	@ExceptionHandler(RegistroNaoEncontradoException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ResponseEntity<RespostaPadraoInsucesso> responderErro(RegistroNaoEncontradoException e, HttpServletRequest request){
-		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.NOT_FOUND.value(), e.getMessage()); 
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
+	@ResponseBody
+	public RespostaPadraoErro responderErro(RegistroNaoEncontradoException e, HttpServletRequest request){
+		RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.NOT_FOUND.value(), e.getMessage()); 
+		return resposta;
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<RespostaPadraoInsucesso> responderErro(MethodArgumentNotValidException e, HttpServletRequest request){
-		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), "Parâmetro(s) obrigatório(s) não informado(s)."); 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
+	@ResponseBody
+	public RespostaPadraoErro responderErro(MethodArgumentNotValidException e, HttpServletRequest request){
+		RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.BAD_REQUEST.value(), "Parâmetro(s) obrigatório(s) não informado(s)."); 
+		return resposta;
 	}
 
 	@ExceptionHandler(ParametroRequeridoException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<RespostaPadraoInsucesso> responderErro(ParametroRequeridoException e, HttpServletRequest request){
-		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
+	@ResponseBody
+	public RespostaPadraoErro responderErro(ParametroRequeridoException e, HttpServletRequest request){
+		RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
+		return resposta;
 	}
 
 	@ExceptionHandler(RegistroDuplicadoException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<RespostaPadraoInsucesso> responderErro(RegistroDuplicadoException e, HttpServletRequest request){
-		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ResponseBody
+	public RespostaPadraoErro responderErro(RegistroDuplicadoException e, HttpServletRequest request){
+		RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.CONFLICT.value(), e.getMessage()); 
+		return resposta;
 	}
 
 	@ExceptionHandler(AtletaNaoContidoClubeOrigemException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<RespostaPadraoInsucesso> responderErro(AtletaNaoContidoClubeOrigemException e, HttpServletRequest request){
-		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
+	@ResponseBody
+	public RespostaPadraoErro responderErro(AtletaNaoContidoClubeOrigemException e, HttpServletRequest request){
+		RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
+		return resposta;
 	}
 
 	@ExceptionHandler(ValorForaDominioException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<RespostaPadraoInsucesso> responderErro(ValorForaDominioException e, HttpServletRequest request){
-		RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
+	@ResponseBody
+	public RespostaPadraoErro responderErro(ValorForaDominioException e, HttpServletRequest request){
+		RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
+		return resposta;
+	}
+
+	@ExceptionHandler(NumberFormatException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public RespostaPadraoErro responderErro(NumberFormatException e, HttpServletRequest request){
+		RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.BAD_REQUEST.value(), e.getMessage()); 
+		return resposta;
 	}
 
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity<RespostaPadraoInsucesso> responderErro(Exception e, HttpServletRequest request){
+	public ResponseEntity<RespostaPadraoErro> responderErro(Exception e, HttpServletRequest request){
 		Throwable resultCause = getResultCause(e);
 	    if (resultCause instanceof SQLIntegrityConstraintViolationException) {
-			RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.BAD_REQUEST.value(), "Registro não pode ser excluído, pois possui dependências."); 
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resposta);
+			RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.CONFLICT.value(), "Registro não pode ser excluído, pois possui dependências."); 
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(resposta);
 	    } else {
-	    	//RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.");
-	    	RespostaPadraoInsucesso resposta = new RespostaPadraoInsucesso(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+	    	RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.");
+	    	//RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resposta);
 	    }
 

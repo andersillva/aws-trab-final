@@ -25,7 +25,7 @@ import br.com.silvaandersonm.trabfinal.api.VersaoAPI;
 import br.com.silvaandersonm.trabfinal.api.dto.TransferenciaAlteracaoDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.TransferenciaDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.TransferenciaInclusaoDTO;
-import br.com.silvaandersonm.trabfinal.api.exception.RespostaPadraoInsucesso;
+import br.com.silvaandersonm.trabfinal.api.exception.RespostaPadraoErro;
 import br.com.silvaandersonm.trabfinal.domain.model.Atleta;
 import br.com.silvaandersonm.trabfinal.domain.model.Clube;
 import br.com.silvaandersonm.trabfinal.domain.model.Transferencia;
@@ -70,7 +70,7 @@ public class TransferenciaResource {
 
 	@Operation(summary = "Obtém uma transferência a partir de seu ID.")
 	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="404", description="Transferência não encontrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+						   @ApiResponse(responseCode="404", description="Transferência não encontrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@GetMapping("/transferencias/{id}")
 	public ResponseEntity<TransferenciaDTO> obterTransferencia(@PathVariable("id") Long id) {
 		Transferencia transferencia = transferenciaService.obterPorId(id);
@@ -81,7 +81,8 @@ public class TransferenciaResource {
 
 	@Operation(summary = "Cria uma nova transferência.")
 	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Transferência criada com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
-						   @ApiResponse(responseCode="400", description="Parâmetros não informados, parâmetros com valores inválidos, ou registro já existente.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+						   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+						   @ApiResponse(responseCode="409", description="Transferência informada já existe.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/transferencias", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirTransferencia(@Valid @RequestBody TransferenciaInclusaoDTO transferenciaInclusaoDTO) {
 		Transferencia transferencia = mapearTransferencia(transferenciaInclusaoDTO);
@@ -92,8 +93,9 @@ public class TransferenciaResource {
 
 	@Operation(summary = "Altera uma transferência existente a partir de seu ID.")
 	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Transferência alterada com sucesso."),
-			   			   @ApiResponse(responseCode="400", description="Parâmetros não informados, parâmetros com valores inválidos, ou registro já existente.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))}),
-			   			   @ApiResponse(responseCode="404", description="Transferência não encontrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+			   			   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+			   			   @ApiResponse(responseCode="404", description="Transferência não encontrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+			   			   @ApiResponse(responseCode="409", description="Já existe outra tranferência igual registrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PutMapping(path="/transferencias/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarTransferencia(@PathVariable("id") Long id, 
 													 @Valid @RequestBody TransferenciaAlteracaoDTO transferenciaAlteracaoDTO) {
@@ -104,7 +106,7 @@ public class TransferenciaResource {
 
 	@Operation(summary = "Exclui uma transferência existente a partir de seu ID.")
 	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Transferência excluída com sucesso."),
-						   @ApiResponse(responseCode="400", description="Transferência não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoInsucesso.class))})})
+						   @ApiResponse(responseCode="409", description="Transferência não pode ser excluída, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@DeleteMapping("/transferencias/{id}")
 	public ResponseEntity<Void> excluirTransferencia(@PathVariable("id") Long id) {
 		transferenciaService.excluir(id);
