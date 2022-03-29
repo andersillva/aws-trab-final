@@ -26,7 +26,7 @@ public class AutenticacaoService implements UserDetailsService {
 			return new UsuarioAutenticado(usuario.get());
 		}
 
-		throw new UsernameNotFoundException("User not found");
+		throw new UsernameNotFoundException("Usuário ou senha inválidos.");
 	}	
 
 }
