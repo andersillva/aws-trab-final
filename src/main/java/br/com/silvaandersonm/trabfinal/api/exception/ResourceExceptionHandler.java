@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -77,6 +78,14 @@ public class ResourceExceptionHandler {
 		return resposta;
 	}
 
+	@ExceptionHandler(BadCredentialsException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseBody
+	public RespostaPadraoErro responderErro(BadCredentialsException e, HttpServletRequest request){
+		RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.NOT_FOUND.value(), "Usuário ou senha inválidos.");
+		return resposta;
+	}
+
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<RespostaPadraoErro> responderErro(Exception e, HttpServletRequest request){
@@ -86,7 +95,6 @@ public class ResourceExceptionHandler {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(resposta);
 	    } else {
 	    	RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.");
-	    	//RespostaPadraoErro resposta = new RespostaPadraoErro(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resposta);
 	    }
 

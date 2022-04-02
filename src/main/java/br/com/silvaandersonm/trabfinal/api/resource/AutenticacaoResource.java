@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.silvaandersonm.trabfinal.api.VersaoAPI;
 import br.com.silvaandersonm.trabfinal.api.dto.AutenticacaoDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.TokenDTO;
+import br.com.silvaandersonm.trabfinal.api.exception.RespostaPadraoErro;
 import br.com.silvaandersonm.trabfinal.seguranca.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,14 +36,13 @@ public class AutenticacaoResource {
 	@PostMapping("/login")
 	@Operation(summary = "Autentica o usuário para obtenção de um token de acesso.")
 	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="404", description="Usuário ou senha inválidos.", content={@Content(schema=@Schema(hidden=true))})})
+						   @ApiResponse(responseCode="404", description="Usuário ou senha inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+						   @ApiResponse(responseCode="500", description="Ocorreu um erro interno no servidor.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	public ResponseEntity<TokenDTO> auth(@RequestBody @Validated AutenticacaoDTO autenticacaoDTO){
-
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(autenticacaoDTO.getLogin(), autenticacaoDTO.getSenha());
 		Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 		String token = tokenService.generateToken(authentication);
 		return ResponseEntity.ok(TokenDTO.builder().type("Bearer").token(token).build());
-
 	}
 
 }
