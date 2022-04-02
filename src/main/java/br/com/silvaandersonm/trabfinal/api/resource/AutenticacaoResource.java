@@ -16,6 +16,11 @@ import br.com.silvaandersonm.trabfinal.api.VersaoAPI;
 import br.com.silvaandersonm.trabfinal.api.dto.AutenticacaoDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.TokenDTO;
 import br.com.silvaandersonm.trabfinal.seguranca.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping(path=VersaoAPI.URI_BASE_V1, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -28,6 +33,9 @@ public class AutenticacaoResource {
 	private TokenService tokenService;
 
 	@PostMapping("/login")
+	@Operation(summary = "Autentica o usuário para obtenção de um token de acesso.")
+	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode="404", description="Usuário ou senha inválidos.", content={@Content(schema=@Schema(hidden=true))})})
 	public ResponseEntity<TokenDTO> auth(@RequestBody @Validated AutenticacaoDTO autenticacaoDTO){
 
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(autenticacaoDTO.getLogin(), autenticacaoDTO.getSenha());
