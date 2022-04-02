@@ -1,4 +1,4 @@
-package br.com.silvaandersonm.trabfinal.seguranca;
+package br.com.silvaandersonm.trabfinal.security;
 
 import java.util.Date;
 

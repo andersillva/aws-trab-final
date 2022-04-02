@@ -16,7 +16,7 @@ import br.com.silvaandersonm.trabfinal.api.VersaoAPI;
 import br.com.silvaandersonm.trabfinal.api.dto.AutenticacaoDTO;
 import br.com.silvaandersonm.trabfinal.api.dto.TokenDTO;
 import br.com.silvaandersonm.trabfinal.api.exception.RespostaPadraoErro;
-import br.com.silvaandersonm.trabfinal.seguranca.TokenService;
+import br.com.silvaandersonm.trabfinal.security.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
