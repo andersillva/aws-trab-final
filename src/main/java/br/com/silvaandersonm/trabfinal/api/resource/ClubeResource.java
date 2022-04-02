@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,7 +90,6 @@ public class ClubeResource {
 						   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
 						   @ApiResponse(responseCode="409", description="Já existe um clube com o nome informado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/clubes", consumes=MediaType.APPLICATION_JSON_VALUE)
-	@Secured("ADMINISTRACAO")
 	public ResponseEntity<Void> incluirClube(@Valid @RequestBody ClubePersistenciaDTO clubePersistenciaDTO) {
 		ModelMapper mapper = new ModelMapper();
 		Clube clube = mapper.map(clubePersistenciaDTO, Clube.class);

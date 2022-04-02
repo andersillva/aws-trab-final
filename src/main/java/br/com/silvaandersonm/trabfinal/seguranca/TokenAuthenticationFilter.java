@@ -18,19 +18,18 @@ import br.com.silvaandersonm.trabfinal.domain.model.Usuario;
 import br.com.silvaandersonm.trabfinal.domain.repository.UsuarioRepository;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
-	
+
 	private final TokenService tokenService;
 	private final UsuarioRepository repository;
-	
+
 	public TokenAuthenticationFilter(TokenService tokenService, UsuarioRepository repository) {
 		this.tokenService = tokenService;
 		this.repository = repository;
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
 		String tokenFromHeader = getTokenFromHeader(request);
 		boolean tokenValid = tokenService.isTokenValid(tokenFromHeader);
 		if(tokenValid) {
@@ -41,12 +40,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private void authenticate(String tokenFromHeader) {
+
 		Long id = tokenService.getTokenId(tokenFromHeader);
-		
 		Optional<Usuario> optionalUser = repository.findById(id);
-		
+
 		if(optionalUser.isPresent()) {
-			
 			UsuarioAutenticado user = new UsuarioAutenticado(optionalUser.get());
 			List<UsuarioAutenticado> lista = new ArrayList<UsuarioAutenticado>();
 			lista.add(user);		
@@ -60,7 +58,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		if(token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
 			return null;
 		}
-		
+
 		return token.substring(7, token.length());
 	}
 

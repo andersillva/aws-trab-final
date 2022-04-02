@@ -23,10 +23,10 @@ public class AutenticacaoResource {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@PostMapping("/login")
 	public ResponseEntity<TokenDTO> auth(@RequestBody @Validated AutenticacaoDTO autenticacaoDTO){
 
@@ -34,7 +34,7 @@ public class AutenticacaoResource {
 		Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 		String token = tokenService.generateToken(authentication);
 		return ResponseEntity.ok(TokenDTO.builder().type("Bearer").token(token).build());
-		
+
 	}
 
 }
