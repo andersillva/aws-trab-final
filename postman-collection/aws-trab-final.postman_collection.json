@@ -1,0 +1,957 @@
+{
+	"info": {
+		"_postman_id": "75c8f0be-ef68-463b-aeb7-5c5d8bbcedd5",
+		"name": "aws-trab-final",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "clubes",
+			"item": [
+				{
+					"name": "clubes-lista",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJJUlMiLCJzdWIiOiIyIiwiaWF0IjoxNjQ4NDk4MDMzLCJleHAiOjE2NDg1ODQ0MzN9._gcvzZSVfM1YJVmC6bDZf_0sQLfG1kTAxkoobIcU4Ko",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/clubes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"clubes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clubes-busca-por-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/clubes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"clubes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clubes-lista-atletas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/clubes/1/atletas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"clubes",
+								"1",
+								"atletas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clubes-inclusao",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"abcdefgd\",\r\n  \"cidade\": \"Fortaleza\",\r\n  \"uf\": \"CE\",\r\n  \"dataFundacao\": \"1918-10-18\",\r\n  \"estadio\": \"Castelão\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/clubes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"clubes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clubes-alteracao",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJJUlMiLCJzdWIiOiIxIiwiaWF0IjoxNjQ4NDk3OTM0LCJleHAiOjE2NDg1ODQzMzR9.yWfXxpAhJwVYmfi6WDEYPmBC1dISTxDxMztfy39s3Kg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Palmeiras2\",\r\n  \"cidade\": \"São Paulo\",\r\n  \"uf\": \"SP\",\r\n  \"dataFundacao\": \"1914-08-26\",\r\n  \"estadio\": \"Allianz Parque\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/clubes/35",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"clubes",
+								"35"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clubes-exclusao",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/clubes/35",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"clubes",
+								"35"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "torneios",
+			"item": [
+				{
+					"name": "participantes",
+					"item": [
+						{
+							"name": "torneios-lista-participantes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/participantes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"participantes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-participantes-busca-por-id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/participantes/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"participantes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-inclusao-participantes",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idClube\": 5,\r\n  \"situacao\": \"CLASSIFICADO\",\r\n  \"pontuacao\": 0\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/participantes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"participantes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-alteracao-participantes",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"situacao\": \"CLASSIFICADO\",\r\n  \"pontuacao\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/participantes/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"participantes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-exclusao-participantes",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/participantes/5",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"participantes",
+										"5"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "partidas",
+					"item": [
+						{
+							"name": "torneios-lista-partidas",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/partidas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"partidas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-partidas-busca-por-id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/partidas/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"partidas",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-inclusao-partidas",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idClubeMandante\": 4,\r\n  \"idClubeVisitante\": 2,\r\n  \"data\": \"2022-04-09\",\r\n  \"local\": \"Estádio Maracanã\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/partidas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"partidas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-alteracao-partidas",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idClubeMandante\": 3,\r\n  \"idClubeVisitante\": 5,\r\n  \"data\": \"2022-04-10\",\r\n  \"situacao\": \"NAO_INICIADA\",\r\n  \"local\": \"Estádio Maracanã\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/partidas/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"partidas",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-exclusao-partidas",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/partidas/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"partidas",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "eventos",
+					"item": [
+						{
+							"name": "torneios-lista-eventos",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/partidas/1/eventos",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"partidas",
+										"1",
+										"eventos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-eventos-busca-por-id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/partidas/1/eventos/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"partidas",
+										"1",
+										"eventos",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "torneios-inclusao-eventos",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"descricao\": \"Gol de Edenilson\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/torneios/1/partidas/1/eventos/gol",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"torneios",
+										"1",
+										"partidas",
+										"1",
+										"eventos",
+										"gol"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "torneios-lista",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/torneios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"torneios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "torneios-busca-por-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/torneios/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"torneios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "torneios-inclusao",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Campeonato Brasileiro\",\r\n  \"ano\": 2023,\r\n  \"dataInicio\": \"2022-04-10\",\r\n  \"dataFim\": \"2022-11-13\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/torneios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"torneios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "torneios-alteracao",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Campeonato Brasileiro\",\r\n  \"ano\": 2022,\r\n  \"dataInicio\": \"2022-04-10\",\r\n  \"dataFim\": \"2022-11-13\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/torneios/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"torneios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "torneios-exclusao",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/torneios/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"torneios",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "atletas",
+			"item": [
+				{
+					"name": "atletas-lista",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/atletas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"atletas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atletas-busca-por-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/atletas/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"atletas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atletas-inclusao",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Teste\",\r\n  \"nomeCompleto\": \"Teste\",\r\n  \"dataNascimento\": \"1996-04-28\",\r\n  \"cidadeNascimento\": \"Ucacha\",\r\n  \"ufNascimento\": \"RS\",\r\n  \"paisNascimento\": \"Argentina\",\r\n  \"altura\": 1.75,\r\n  \"idClube\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/atletas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"atletas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atletas-alteracao",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"David\",\r\n  \"nomeCompleto\": \"David Corrêa da Fonseca\",\r\n  \"dataNascimento\": \"1995-10-17T02:00:00.000+00:00\",\r\n  \"cidadeNascimento\": \"Vitória\",\r\n  \"ufNascimento\": \"ES\",\r\n  \"paisNascimento\": \"Brasil\",\r\n  \"altura\": 1.79\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/atletas/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"atletas",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atletas-exclusao",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/atletas/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"atletas",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "transferencias",
+			"item": [
+				{
+					"name": "transferencias-lista",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transferencias",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transferencias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transferencias-busca-por-id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transferencias/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transferencias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transferencias-inclusao",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idClubeOrigem\": 2,\r\n  \"idClubeDestino\": 5,\r\n  \"idAtleta\": 6,\r\n  \"data\": \"2022-03-14\",\r\n  \"valor\": 200000.00,\r\n  \"moeda\": \"Real\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transferencias",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transferencias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transferencias-alteracao",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"data\": \"2022-03-14\",\r\n  \"valor\": 150000.00,\r\n  \"moeda\": \"Real\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transferencias/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transferencias",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transferencias-exclusao",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transferencias/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transferencias",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
