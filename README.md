@@ -9,7 +9,7 @@ Matrícula: 142852
 
 A implementação foi realizada em Java utilizando o framework Spring Boot. A implementação foi organizada da seguinte forma:
 
-* Camada de persistência: Foi utilizado o padrão Repository com o ORM Hibernate.
+* Camada de persistência: Foi utilizado o padrão Repository com o ORM Hibernate. O banco de dados utilizado é o MySQL.
 
 * Camada de serviço: Implementação de regras de negócio.
 
