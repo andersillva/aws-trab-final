@@ -14,11 +14,11 @@ https://youtu.be/yN7DEDMKOO8
 
 A implementação foi realizada em Java utilizando o framework Spring Boot. A implementação foi organizada da seguinte forma:
 
-* Camada de persistência: Foi utilizado o padrão Repository com o ORM Hibernate. O banco de dados utilizado é o MySQL.
+* Camada de persistência: Foi utilizado o padrão Repository com o ORM Hibernate e o Spring Data. O banco de dados utilizado é o MySQL.
 
 * Camada de serviço: Implementação de regras de negócio.
 
-* Camada de controle: Utilizada para expor os endpoints.
+* Camada de controle: Utilizada para expor os endpoints e receber as requisições.
 
 
 Para encaminhamento de eventos, foi utilizada o Message Broker Kafka. O provisionamento dos serviços necessários foi realizado via Docker Compose.
