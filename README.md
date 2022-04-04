@@ -5,6 +5,11 @@ Nome: Anderson Machado da Silva
 Matrícula: 142852
 
 
+## Vídeo explicativo:
+
+https://youtu.be/yN7DEDMKOO8
+
+
 ## Descrição da stack utilizada:
 
 A implementação foi realizada em Java utilizando o framework Spring Boot. A implementação foi organizada da seguinte forma:
