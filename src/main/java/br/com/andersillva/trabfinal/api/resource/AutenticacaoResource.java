@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.andersillva.trabfinal.api.ConstantesSwagger;
 import br.com.andersillva.trabfinal.api.VersaoAPI;
 import br.com.andersillva.trabfinal.api.dto.AutenticacaoDTO;
 import br.com.andersillva.trabfinal.api.dto.TokenDTO;
@@ -35,9 +36,9 @@ public class AutenticacaoResource {
 
 	@PostMapping("/login")
 	@Operation(summary = "Autentica o usuário para obtenção de um token de acesso.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="404", description="Usuário ou senha inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
-						   @ApiResponse(responseCode="500", description="Ocorreu um erro interno no servidor.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Usuário ou senha inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+						   @ApiResponse(responseCode=ConstantesSwagger.INTERNAL_SERVER_ERROR, description=ConstantesSwagger.INTERNAL_SERVER_ERROR_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	public ResponseEntity<TokenDTO> auth(@RequestBody @Validated AutenticacaoDTO autenticacaoDTO){
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(autenticacaoDTO.getLogin(), autenticacaoDTO.getSenha());
 		Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);

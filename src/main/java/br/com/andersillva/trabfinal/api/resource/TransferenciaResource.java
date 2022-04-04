@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.andersillva.trabfinal.api.ConstantesSwagger;
 import br.com.andersillva.trabfinal.api.VersaoAPI;
 import br.com.andersillva.trabfinal.api.dto.TransferenciaAlteracaoDTO;
 import br.com.andersillva.trabfinal.api.dto.TransferenciaDTO;
@@ -40,9 +41,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping(path=VersaoAPI.URI_BASE_V1, produces=MediaType.APPLICATION_JSON_VALUE)
-@ApiResponses(value={@ApiResponse(responseCode="401", description="Usuário não autenticado. O token não foi informado, ou foi informado, mas é inválido.", content={@Content(schema=@Schema(hidden=true))}),
-		 			 @ApiResponse(responseCode="403", description="Usuário não tem permissão para realizar a operação solicitada.", content={@Content(schema=@Schema(hidden=true))}),
-		 			 @ApiResponse(responseCode="500", description="Ocorreu um erro interno no servidor.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+@ApiResponses(value={@ApiResponse(responseCode=ConstantesSwagger.UNAUTHORIZED, description=ConstantesSwagger.UNAUTHORIZED_DESCRIPTION, content={@Content(schema=@Schema(hidden=true))}),
+		 			 @ApiResponse(responseCode=ConstantesSwagger.FORBIDDEN, description=ConstantesSwagger.FORBIDDEN_DESCRIPTION, content={@Content(schema=@Schema(hidden=true))}),
+		 			 @ApiResponse(responseCode=ConstantesSwagger.INTERNAL_SERVER_ERROR, description=ConstantesSwagger.INTERNAL_SERVER_ERROR_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 public class TransferenciaResource {
 
 	@Autowired
@@ -55,8 +56,8 @@ public class TransferenciaResource {
 	private AtletaService atletaService;
 
 	@Operation(summary = "Obtém a lista de transferências.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="204", description="Não existe nenhuma transferência cadastrada.")})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.NO_CONTENT, description="Não existe nenhuma transferência cadastrada.")})
 	@GetMapping("/transferencias")
 	public ResponseEntity<List<TransferenciaDTO>> listarTransferencias() {
 		List<Transferencia> transferencias = transferenciaService.listar();
@@ -72,8 +73,8 @@ public class TransferenciaResource {
 	}
 
 	@Operation(summary = "Obtém uma transferência a partir de seu ID.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="404", description="Transferência não encontrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Transferência não encontrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@GetMapping("/transferencias/{id}")
 	public ResponseEntity<TransferenciaDTO> obterTransferencia(@PathVariable("id") Long id) {
 		Transferencia transferencia = transferenciaService.obterPorId(id);
@@ -84,8 +85,8 @@ public class TransferenciaResource {
 
 	@Operation(summary = "Cria uma nova transferência.")
 	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Transferência criada com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
-						   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
-						   @ApiResponse(responseCode="409", description="Transferência informada já existe.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+						   @ApiResponse(responseCode=ConstantesSwagger.BAD_REQUEST, description=ConstantesSwagger.BAD_REQUEST_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+						   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Transferência informada já existe.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/transferencias", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirTransferencia(@Valid @RequestBody TransferenciaInclusaoDTO transferenciaInclusaoDTO) {
 		Transferencia transferencia = mapearTransferencia(transferenciaInclusaoDTO);
@@ -95,10 +96,10 @@ public class TransferenciaResource {
 	}
 
 	@Operation(summary = "Altera uma transferência existente a partir de seu ID.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Transferência alterada com sucesso."),
-			   			   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
-			   			   @ApiResponse(responseCode="404", description="Transferência não encontrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
-			   			   @ApiResponse(responseCode="409", description="Já existe outra tranferência igual registrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Transferência alterada com sucesso."),
+			   			   @ApiResponse(responseCode=ConstantesSwagger.BAD_REQUEST, description=ConstantesSwagger.BAD_REQUEST_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+			   			   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Transferência não encontrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+			   			   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Já existe outra tranferência igual registrada.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PutMapping(path="/transferencias/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarTransferencia(@PathVariable("id") Long id, 
 													 @Valid @RequestBody TransferenciaAlteracaoDTO transferenciaAlteracaoDTO) {
@@ -108,8 +109,8 @@ public class TransferenciaResource {
 	}
 
 	@Operation(summary = "Exclui uma transferência existente a partir de seu ID.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Transferência excluída com sucesso."),
-						   @ApiResponse(responseCode="409", description="Transferência não pode ser excluída, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Transferência excluída com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Transferência não pode ser excluída, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@DeleteMapping("/transferencias/{id}")
 	public ResponseEntity<Void> excluirTransferencia(@PathVariable("id") Long id) {
 		transferenciaService.excluir(id);

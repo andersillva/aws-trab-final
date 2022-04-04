@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.andersillva.trabfinal.api.ConstantesSwagger;
 import br.com.andersillva.trabfinal.api.VersaoAPI;
 import br.com.andersillva.trabfinal.api.dto.ClubeAtletaDTO;
 import br.com.andersillva.trabfinal.api.dto.ClubeDTO;
@@ -38,17 +39,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping(path=VersaoAPI.URI_BASE_V1, produces=MediaType.APPLICATION_JSON_VALUE)
-@ApiResponses(value={@ApiResponse(responseCode="401", description="Usuário não autenticado. O token não foi informado, ou foi informado, mas é inválido.", content={@Content(schema=@Schema(hidden=true))}),
-		 			 @ApiResponse(responseCode="403", description="Usuário não tem permissão para realizar a operação solicitada.", content={@Content(schema=@Schema(hidden=true))}),
-		 			 @ApiResponse(responseCode="500", description="Ocorreu um erro interno no servidor.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+@ApiResponses(value={@ApiResponse(responseCode=ConstantesSwagger.UNAUTHORIZED, description=ConstantesSwagger.UNAUTHORIZED_DESCRIPTION, content={@Content(schema=@Schema(hidden=true))}),
+		 			 @ApiResponse(responseCode=ConstantesSwagger.FORBIDDEN, description=ConstantesSwagger.FORBIDDEN_DESCRIPTION, content={@Content(schema=@Schema(hidden=true))}),
+		 			 @ApiResponse(responseCode=ConstantesSwagger.INTERNAL_SERVER_ERROR, description=ConstantesSwagger.INTERNAL_SERVER_ERROR_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 public class ClubeResource {
 
 	@Autowired
 	private ClubeService clubeService;
 
 	@Operation(summary = "Obtém a lista de clubes.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="204", description="Não existe nenhum clube cadastrado.")})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.NO_CONTENT, description="Não existe nenhum clube cadastrado.")})
 	@GetMapping("/clubes")
 	public ResponseEntity<List<ClubeResumoDTO>> listarClubes() {
 		List<Clube> clubes = clubeService.listar();
@@ -62,8 +63,8 @@ public class ClubeResource {
 	}
 
 	@Operation(summary = "Obtém um clube a partir de seu ID.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="404", description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@GetMapping("/clubes/{id}")
 	public ResponseEntity<ClubeDTO> obterClube(@PathVariable("id") Long id) {
 		Clube clube = clubeService.obterPorId(id);
@@ -73,9 +74,9 @@ public class ClubeResource {
 	}
 
 	@Operation(summary = "Obtém a lista de atletas a partir do ID de um clube.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="204", description="Clube não possui nenhum atleta."),
-						   @ApiResponse(responseCode="404", description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.NO_CONTENT, description="Clube não possui nenhum atleta."),
+						   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@GetMapping("/clubes/{id}/atletas")
 	public ResponseEntity<List<ClubeAtletaDTO>> listarAtletas(@PathVariable("id") Long idClube) {
 		List<Atleta> atletas = clubeService.listarAtletas(idClube);
@@ -89,9 +90,9 @@ public class ClubeResource {
 	}
 
 	@Operation(summary = "Cria um novo clube.")
-	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Clube criado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
-						   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
-						   @ApiResponse(responseCode="409", description="Já existe um clube com o nome informado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.CREATED, description="Clube criado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
+						   @ApiResponse(responseCode=ConstantesSwagger.BAD_REQUEST, description=ConstantesSwagger.BAD_REQUEST_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+						   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Já existe um clube com o nome informado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/clubes", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirClube(@Valid @RequestBody ClubePersistenciaDTO clubePersistenciaDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -102,10 +103,10 @@ public class ClubeResource {
 	}
 
 	@Operation(summary = "Altera um clube existente a partir de seu ID.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Clube alterado com sucesso."),
-			   			   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
-			   			   @ApiResponse(responseCode="404", description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
-			   			   @ApiResponse(responseCode="409", description="Já existe outro clube com o nome informado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Clube alterado com sucesso."),
+			   			   @ApiResponse(responseCode=ConstantesSwagger.BAD_REQUEST, description=ConstantesSwagger.BAD_REQUEST_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+			   			   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+			   			   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Já existe outro clube com o nome informado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PutMapping(path="/clubes/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarClube(@PathVariable("id") Long id, @Valid @RequestBody ClubePersistenciaDTO clubePersistenciaDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -116,8 +117,8 @@ public class ClubeResource {
 	}
 
 	@Operation(summary = "Exclui um clube existente a partir de seu ID.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Clube excluído com sucesso."),
-						   @ApiResponse(responseCode="409", description="Clube não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Clube excluído com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Clube não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@DeleteMapping("/clubes/{id}")
 	public ResponseEntity<Void> excluirClube(@PathVariable("id") Long id) {
 		clubeService.excluir(id);

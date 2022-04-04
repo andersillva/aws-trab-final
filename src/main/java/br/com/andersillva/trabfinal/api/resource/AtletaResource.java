@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.andersillva.trabfinal.api.ConstantesSwagger;
 import br.com.andersillva.trabfinal.api.VersaoAPI;
 import br.com.andersillva.trabfinal.api.dto.AtletaDTO;
 import br.com.andersillva.trabfinal.api.dto.AtletaInclusaoDTO;
@@ -39,9 +40,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping(path=VersaoAPI.URI_BASE_V1, produces=MediaType.APPLICATION_JSON_VALUE)
-@ApiResponses(value={@ApiResponse(responseCode="401", description="Usuário não autenticado. O token não foi informado, ou foi informado, mas é inválido.", content={@Content(schema=@Schema(hidden=true))}),
-					 @ApiResponse(responseCode="403", description="Usuário não tem permissão para realizar a operação solicitada.", content={@Content(schema=@Schema(hidden=true))}),
-					 @ApiResponse(responseCode="500", description="Ocorreu um erro interno no servidor.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+@ApiResponses(value={@ApiResponse(responseCode=ConstantesSwagger.UNAUTHORIZED, description=ConstantesSwagger.UNAUTHORIZED_DESCRIPTION, content={@Content(schema=@Schema(hidden=true))}),
+					 @ApiResponse(responseCode=ConstantesSwagger.FORBIDDEN, description=ConstantesSwagger.FORBIDDEN_DESCRIPTION, content={@Content(schema=@Schema(hidden=true))}),
+					 @ApiResponse(responseCode=ConstantesSwagger.INTERNAL_SERVER_ERROR, description=ConstantesSwagger.INTERNAL_SERVER_ERROR_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 public class AtletaResource {
 
 	@Autowired
@@ -51,8 +52,8 @@ public class AtletaResource {
 	private ClubeService clubeService;
 
 	@Operation(summary = "Obtém a lista de atletas.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="204", description="Não existe nenhum atleta cadastrado.")})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.NO_CONTENT, description="Não existe nenhum atleta cadastrado.")})
 	@GetMapping("/atletas")
 	public ResponseEntity<List<AtletaResumoDTO>> listarAtletas() {
 		List<Atleta> atletas = atletaService.listar();
@@ -66,8 +67,8 @@ public class AtletaResource {
 	}
 
 	@Operation(summary = "Obtém um atleta a partir de seu ID.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Requisição processada com sucesso."),
-						   @ApiResponse(responseCode="404", description="Atleta não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Requisição processada com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Atleta não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@GetMapping("/atletas/{id}")
 	public ResponseEntity<AtletaDTO> obterAtleta(@PathVariable("id") Long id) {
 		Atleta atleta = atletaService.obterPorId(id);
@@ -77,9 +78,9 @@ public class AtletaResource {
 	}
 
 	@Operation(summary = "Cria um novo atleta.")
-	@ApiResponses(value = {@ApiResponse(responseCode="201", description="Atleta criado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
-						   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
-						   @ApiResponse(responseCode="404", description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.CREATED, description="Atleta criado com sucesso. A URL do novo recurso é adicionada cabeçalho Location."),
+						   @ApiResponse(responseCode=ConstantesSwagger.BAD_REQUEST, description=ConstantesSwagger.BAD_REQUEST_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+						   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/atletas", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirAtleta(@Valid @RequestBody AtletaInclusaoDTO atletaInclusaoDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -92,9 +93,9 @@ public class AtletaResource {
 	}
 
 	@Operation(summary = "Altera um atleta existente a partir de seu ID.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Atleta alterado com sucesso."),
-			   			   @ApiResponse(responseCode="400", description="Parâmetros não informados ou com valores inválidos.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
-			   			   @ApiResponse(responseCode="404", description="Atleta ou clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Atleta alterado com sucesso."),
+			   			   @ApiResponse(responseCode=ConstantesSwagger.BAD_REQUEST, description=ConstantesSwagger.BAD_REQUEST_DESCRIPTION, content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))}),
+			   			   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Atleta ou clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PutMapping(path="/atletas/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarAtleta(@PathVariable("id") Long id, @Valid @RequestBody AtletaPersistenciaDTO atletaPersistenciaDTO) {
 		ModelMapper mapper = new ModelMapper();
@@ -107,8 +108,8 @@ public class AtletaResource {
 	}
 
 	@Operation(summary = "Exclui um atleta existente a partir de seu ID.")
-	@ApiResponses(value = {@ApiResponse(responseCode="200", description="Atleta excluído com sucesso."),
-						   @ApiResponse(responseCode="409", description="Atleta não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
+	@ApiResponses(value = {@ApiResponse(responseCode=ConstantesSwagger.OK, description="Atleta excluído com sucesso."),
+						   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Atleta não pode ser excluído, pois possui dependências.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@DeleteMapping("/atletas/{id}")
 	public ResponseEntity<Void> excluirAtleta(@PathVariable("id") Long id) {
 		atletaService.excluir(id);
