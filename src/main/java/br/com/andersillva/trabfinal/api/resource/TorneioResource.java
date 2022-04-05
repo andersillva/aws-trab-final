@@ -3,11 +3,9 @@ package br.com.andersillva.trabfinal.api.resource;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.andersillva.trabfinal.api.ConstantesSwagger;
-import br.com.andersillva.trabfinal.api.VersaoAPI;
 import br.com.andersillva.trabfinal.api.dto.EventoDTO;
 import br.com.andersillva.trabfinal.api.dto.EventoPersistenciaDTO;
 import br.com.andersillva.trabfinal.api.dto.ParticipanteAlteracaoDTO;
@@ -35,12 +31,16 @@ import br.com.andersillva.trabfinal.api.dto.TorneioPartidaDTO;
 import br.com.andersillva.trabfinal.api.dto.TorneioPersistenciaDTO;
 import br.com.andersillva.trabfinal.api.dto.TorneioResumoDTO;
 import br.com.andersillva.trabfinal.api.exception.RespostaPadraoErro;
-import br.com.andersillva.trabfinal.domain.enumerator.TipoEvento;
+import br.com.andersillva.trabfinal.api.util.ConstantesSwagger;
+import br.com.andersillva.trabfinal.api.util.DTOFactory;
+import br.com.andersillva.trabfinal.api.util.EntityFactory;
+import br.com.andersillva.trabfinal.api.util.VersaoAPI;
 import br.com.andersillva.trabfinal.domain.model.Clube;
 import br.com.andersillva.trabfinal.domain.model.Evento;
 import br.com.andersillva.trabfinal.domain.model.Participante;
 import br.com.andersillva.trabfinal.domain.model.Partida;
 import br.com.andersillva.trabfinal.domain.model.Torneio;
+import br.com.andersillva.trabfinal.domain.model.enums.TipoEvento;
 import br.com.andersillva.trabfinal.domain.service.ClubeService;
 import br.com.andersillva.trabfinal.domain.service.EventoService;
 import br.com.andersillva.trabfinal.domain.service.ParticipanteService;
@@ -50,8 +50,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping(path=VersaoAPI.URI_BASE_V1, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -82,8 +82,7 @@ public class TorneioResource {
 	public ResponseEntity<List<TorneioResumoDTO>> listarTorneios() {
 		List<Torneio> torneios = torneioService.listar();
 		if (torneios.size() > 0) {
-			ModelMapper mapper = new ModelMapper();
-			List<TorneioResumoDTO> torneiosResumoDTO = torneios.stream().map(c -> mapper.map(c, TorneioResumoDTO.class)).collect(Collectors.toList());
+			List<TorneioResumoDTO> torneiosResumoDTO = DTOFactory.getTorneioResumoDTO(torneios);
 			return new ResponseEntity<>(torneiosResumoDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -96,8 +95,7 @@ public class TorneioResource {
 	@GetMapping("/torneios/{id}")
 	public ResponseEntity<TorneioDTO> obterTorneio(@PathVariable("id") Long id) {
 		Torneio torneio = torneioService.obterPorId(id);
-		ModelMapper mapper = new ModelMapper();
-		TorneioDTO torneioDTO = mapper.map(torneio, TorneioDTO.class);
+		TorneioDTO torneioDTO = DTOFactory.getTorneioDTO(torneio);
 		return new ResponseEntity<>(torneioDTO, HttpStatus.OK);
 	}
 
@@ -107,8 +105,7 @@ public class TorneioResource {
 						   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Já existe um torneio com o nome e o ano informados.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/torneios", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirTorneio(@Valid @RequestBody TorneioPersistenciaDTO torneioPersistenciaDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Torneio torneio = mapper.map(torneioPersistenciaDTO, Torneio.class);
+		Torneio torneio = EntityFactory.getTorneio(torneioPersistenciaDTO);
 		torneioService.incluir(torneio);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(torneio.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -121,8 +118,7 @@ public class TorneioResource {
 						   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Já existe outro torneio com o nome e o ano informados.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PutMapping(path="/torneios/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarTorneio(@PathVariable("id") Long id, @Valid @RequestBody TorneioPersistenciaDTO torneioPersistenciaDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Torneio torneio = mapper.map(torneioPersistenciaDTO, Torneio.class);
+		Torneio torneio = EntityFactory.getTorneio(torneioPersistenciaDTO);
 		torneio.setId(id);
 		torneioService.alterar(torneio);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -145,8 +141,7 @@ public class TorneioResource {
 	public ResponseEntity<List<TorneioParticipanteDTO>> listarParticipantes(@PathVariable("id") Long idTorneio) {
 		List<Participante> participantes = participanteService.listarPorTorneio(idTorneio);
 		if (participantes.size() > 0) {
-			ModelMapper mapper = new ModelMapper();
-			List<TorneioParticipanteDTO> torneioParticipanteDTO = participantes.stream().map(a -> mapper.map(a, TorneioParticipanteDTO.class)).collect(Collectors.toList());
+			List<TorneioParticipanteDTO> torneioParticipanteDTO = DTOFactory.getTorneioParticipanteDTO(participantes);
 			return new ResponseEntity<>(torneioParticipanteDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -160,8 +155,7 @@ public class TorneioResource {
 	public ResponseEntity<TorneioParticipanteDTO> obterParticipante(@PathVariable("id") Long id,
 												  			   		@PathVariable("id-clube") Long idClube) {
 		Participante participante = participanteService.obterPorChave(id, idClube);
-		ModelMapper mapper = new ModelMapper();
-		TorneioParticipanteDTO torneioParticipanteDTO = mapper.map(participante, TorneioParticipanteDTO.class);
+		TorneioParticipanteDTO torneioParticipanteDTO = DTOFactory.getTorneioParticipanteDTO(participante);
 		return new ResponseEntity<>(torneioParticipanteDTO, HttpStatus.OK);
 	}
 
@@ -172,8 +166,7 @@ public class TorneioResource {
 						   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Clube já consta como participante do torneio.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/torneios/{id}/participantes", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirParticipante(@PathVariable("id") Long id, @Valid @RequestBody ParticipanteInclusaoDTO participanteInclusaoDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Participante participante = mapper.map(participanteInclusaoDTO, Participante.class);
+		Participante participante = EntityFactory.getParticipante(participanteInclusaoDTO);
 		Torneio torneio = torneioService.obterPorId(id);
 		participante.setTorneio(torneio);
 		Clube clube = clubeService.obterPorId(participanteInclusaoDTO.getIdClube());
@@ -216,8 +209,7 @@ public class TorneioResource {
 	public ResponseEntity<List<TorneioPartidaDTO>> listarPartidas(@PathVariable("id") Long idTorneio) {
 		List<Partida> partidas = partidaService.listarPorTorneio(idTorneio);
 		if (partidas.size() > 0) {
-			ModelMapper mapper = new ModelMapper();
-			List<TorneioPartidaDTO> torneioPartidaDTO = partidas.stream().map(a -> mapper.map(a, TorneioPartidaDTO.class)).collect(Collectors.toList());
+			List<TorneioPartidaDTO> torneioPartidaDTO = DTOFactory.getTorneioPartidaDTO(partidas);
 			return new ResponseEntity<>(torneioPartidaDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -231,8 +223,7 @@ public class TorneioResource {
 	public ResponseEntity<TorneioPartidaDTO> obterPartida(@PathVariable("id") Long id,
 												  		  @PathVariable("id-partida") Long idPartida) {
 		Partida partida = partidaService.obterPorId(idPartida);
-		ModelMapper mapper = new ModelMapper();
-		TorneioPartidaDTO torneioPartidaDTO = mapper.map(partida, TorneioPartidaDTO.class);
+		TorneioPartidaDTO torneioPartidaDTO = DTOFactory.getTorneioPartidaDTO(partida);
 		return new ResponseEntity<>(torneioPartidaDTO, HttpStatus.OK);
 	}
 
@@ -264,9 +255,7 @@ public class TorneioResource {
 	}
 
 	private Partida mapearPartida(PartidaPersistenciaDTO partidaPersistenciaDTO, Long idTorneio) {
-		ModelMapper mapper = new ModelMapper();
-		mapper.getConfiguration().setAmbiguityIgnored(true);
-		Partida partida = mapper.map(partidaPersistenciaDTO, Partida.class);
+		Partida partida = EntityFactory.getPartida(partidaPersistenciaDTO);
 		Torneio torneio = torneioService.obterPorId(idTorneio);
 		partida.setTorneio(torneio);
 		Clube mandante = clubeService.obterPorId(partidaPersistenciaDTO.getIdClubeMandante());
@@ -300,8 +289,7 @@ public class TorneioResource {
 			                                  @PathVariable("id-partida") Long idPartida,
 			                                  @Parameter(description = "Tipos suportados: inicio, gol, penalti, lance-perigoso, lance-normal, intervalo, acrescimo, substituicao, advertencia, expulsao, revisao-var, pausa e fim.") @PathVariable("tipo-evento") String tipoEvento, 
 			                                  @Valid @RequestBody EventoPersistenciaDTO eventoPersistenciaDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Evento evento = mapper.map(eventoPersistenciaDTO, Evento.class);
+		Evento evento = EntityFactory.getEvento(eventoPersistenciaDTO);
 		Partida partida = partidaService.obterPorId(idPartida);
 		evento.setPartida(partida);
 		evento.setTipo(TipoEvento.getByValue(tipoEvento));
@@ -321,8 +309,7 @@ public class TorneioResource {
 												 @PathVariable("id-partida") Long idPartida,
 												 @PathVariable("id-evento") Long idEvento) {
 		Evento evento = eventoService.obterPorId(idEvento);
-		ModelMapper mapper = new ModelMapper();
-		EventoDTO eventoDTO = mapper.map(evento, EventoDTO.class);
+		EventoDTO eventoDTO = DTOFactory.getEventoDTO(evento);
 		return new ResponseEntity<>(eventoDTO, HttpStatus.OK);
 	}
 
@@ -337,8 +324,7 @@ public class TorneioResource {
 		partidaService.obterPorId(idPartida);
 		List<Evento> eventos = eventoService.listarPorPartida(idPartida);
 		if (eventos.size() > 0) {
-			ModelMapper mapper = new ModelMapper();
-			List<EventoDTO> eventoDTO = eventos.stream().map(a -> mapper.map(a, EventoDTO.class)).collect(Collectors.toList());
+			List<EventoDTO> eventoDTO = DTOFactory.getEventoDTO(eventos);
 			return new ResponseEntity<>(eventoDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

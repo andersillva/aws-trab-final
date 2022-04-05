@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.andersillva.trabfinal.api.ConstantesSwagger;
-import br.com.andersillva.trabfinal.api.VersaoAPI;
 import br.com.andersillva.trabfinal.api.dto.AutenticacaoDTO;
 import br.com.andersillva.trabfinal.api.dto.TokenDTO;
 import br.com.andersillva.trabfinal.api.exception.RespostaPadraoErro;
+import br.com.andersillva.trabfinal.api.util.ConstantesSwagger;
+import br.com.andersillva.trabfinal.api.util.VersaoAPI;
 import br.com.andersillva.trabfinal.security.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

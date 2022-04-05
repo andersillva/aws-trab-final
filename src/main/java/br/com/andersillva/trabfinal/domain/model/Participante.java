@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import br.com.andersillva.trabfinal.domain.enumerator.SituacaoParticipante;
+import br.com.andersillva.trabfinal.domain.model.enums.SituacaoParticipante;
 import lombok.Data;
 
 @Entity

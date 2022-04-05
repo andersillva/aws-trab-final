@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import br.com.andersillva.trabfinal.domain.enumerator.SituacaoPartida;
+import br.com.andersillva.trabfinal.domain.model.enums.SituacaoPartida;
 import lombok.Data;
 
 @Data

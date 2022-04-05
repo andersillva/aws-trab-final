@@ -2,11 +2,9 @@ package br.com.andersillva.trabfinal.api.resource;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,13 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.andersillva.trabfinal.api.ConstantesSwagger;
-import br.com.andersillva.trabfinal.api.VersaoAPI;
 import br.com.andersillva.trabfinal.api.dto.AtletaDTO;
 import br.com.andersillva.trabfinal.api.dto.AtletaInclusaoDTO;
 import br.com.andersillva.trabfinal.api.dto.AtletaPersistenciaDTO;
 import br.com.andersillva.trabfinal.api.dto.AtletaResumoDTO;
 import br.com.andersillva.trabfinal.api.exception.RespostaPadraoErro;
+import br.com.andersillva.trabfinal.api.util.ConstantesSwagger;
+import br.com.andersillva.trabfinal.api.util.DTOFactory;
+import br.com.andersillva.trabfinal.api.util.EntityFactory;
+import br.com.andersillva.trabfinal.api.util.VersaoAPI;
 import br.com.andersillva.trabfinal.domain.model.Atleta;
 import br.com.andersillva.trabfinal.domain.model.Clube;
 import br.com.andersillva.trabfinal.domain.service.AtletaService;
@@ -58,8 +58,7 @@ public class AtletaResource {
 	public ResponseEntity<List<AtletaResumoDTO>> listarAtletas() {
 		List<Atleta> atletas = atletaService.listar();
 		if (atletas.size() > 0) {
-			ModelMapper mapper = new ModelMapper();
-			List<AtletaResumoDTO> atletasResumoDTO = atletas.stream().map(a -> mapper.map(a, AtletaResumoDTO.class)).collect(Collectors.toList());
+			List<AtletaResumoDTO> atletasResumoDTO = DTOFactory.getAtletaResumoDTO(atletas);
 			return new ResponseEntity<>(atletasResumoDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -72,8 +71,7 @@ public class AtletaResource {
 	@GetMapping("/atletas/{id}")
 	public ResponseEntity<AtletaDTO> obterAtleta(@PathVariable("id") Long id) {
 		Atleta atleta = atletaService.obterPorId(id);
-		ModelMapper mapper = new ModelMapper();
-		AtletaDTO atletaDTO = mapper.map(atleta, AtletaDTO.class);
+		AtletaDTO atletaDTO = DTOFactory.getAtletaDTO(atleta);
 		return new ResponseEntity<>(atletaDTO, HttpStatus.OK);
 	}
 
@@ -83,8 +81,7 @@ public class AtletaResource {
 						   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/atletas", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirAtleta(@Valid @RequestBody AtletaInclusaoDTO atletaInclusaoDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Atleta atleta = mapper.map(atletaInclusaoDTO, Atleta.class);
+		Atleta atleta = EntityFactory.getAtleta(atletaInclusaoDTO);
 		Clube clube = clubeService.obterPorId(atletaInclusaoDTO.getIdClube());
 		atleta.setClube(clube);
 		atletaService.incluir(atleta);
@@ -98,8 +95,7 @@ public class AtletaResource {
 			   			   @ApiResponse(responseCode=ConstantesSwagger.NOT_FOUND, description="Atleta ou clube não encontrado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PutMapping(path="/atletas/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarAtleta(@PathVariable("id") Long id, @Valid @RequestBody AtletaPersistenciaDTO atletaPersistenciaDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Atleta atleta = mapper.map(atletaPersistenciaDTO, Atleta.class);
+		Atleta atleta = EntityFactory.getAtleta(atletaPersistenciaDTO);
 		Clube clube = atletaService.obterPorId(id).getClube();
 		atleta.setClube(clube);
 		atleta.setId(id);

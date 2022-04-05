@@ -2,11 +2,9 @@ package br.com.andersillva.trabfinal.api.resource;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.andersillva.trabfinal.api.ConstantesSwagger;
-import br.com.andersillva.trabfinal.api.VersaoAPI;
 import br.com.andersillva.trabfinal.api.dto.TransferenciaAlteracaoDTO;
 import br.com.andersillva.trabfinal.api.dto.TransferenciaDTO;
 import br.com.andersillva.trabfinal.api.dto.TransferenciaInclusaoDTO;
 import br.com.andersillva.trabfinal.api.exception.RespostaPadraoErro;
+import br.com.andersillva.trabfinal.api.util.ConstantesSwagger;
+import br.com.andersillva.trabfinal.api.util.DTOFactory;
+import br.com.andersillva.trabfinal.api.util.EntityFactory;
+import br.com.andersillva.trabfinal.api.util.VersaoAPI;
 import br.com.andersillva.trabfinal.domain.model.Atleta;
 import br.com.andersillva.trabfinal.domain.model.Clube;
 import br.com.andersillva.trabfinal.domain.model.Transferencia;
@@ -62,10 +62,7 @@ public class TransferenciaResource {
 	public ResponseEntity<List<TransferenciaDTO>> listarTransferencias() {
 		List<Transferencia> transferencias = transferenciaService.listar();
 		if (transferencias.size() > 0) {
-			ModelMapper mapper = new ModelMapper();
-			List<TransferenciaDTO> transferenciasDTO = transferencias.stream()
-					                                                 .map(t -> mapper.map(t, TransferenciaDTO.class))
-					                                                 .collect(Collectors.toList());
+			List<TransferenciaDTO> transferenciasDTO = DTOFactory.getTransferenciaDTO(transferencias);
 			return new ResponseEntity<>(transferenciasDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -78,8 +75,7 @@ public class TransferenciaResource {
 	@GetMapping("/transferencias/{id}")
 	public ResponseEntity<TransferenciaDTO> obterTransferencia(@PathVariable("id") Long id) {
 		Transferencia transferencia = transferenciaService.obterPorId(id);
-		ModelMapper mapper = new ModelMapper();
-		TransferenciaDTO transferenciaDTO = mapper.map(transferencia, TransferenciaDTO.class);
+		TransferenciaDTO transferenciaDTO = DTOFactory.getTransferenciaDTO(transferencia);
 		return new ResponseEntity<>(transferenciaDTO, HttpStatus.OK);
 	}
 
@@ -122,8 +118,7 @@ public class TransferenciaResource {
 		Clube clubeDestino = clubeService.obterPorId(transferenciaInclusaoDTO.getIdClubeDestino());
 		Atleta atleta = atletaService.obterPorId(transferenciaInclusaoDTO.getIdAtleta());
 
-		ModelMapper mapper = new ModelMapper();
-		Transferencia transferencia = mapper.map(transferenciaInclusaoDTO, Transferencia.class);
+		Transferencia transferencia = EntityFactory.getTransferencia(transferenciaInclusaoDTO);
 		transferencia.setClubeOrigem(clubeOrigem);
 		transferencia.setClubeDestino(clubeDestino);
 		transferencia.setAtleta(atleta);

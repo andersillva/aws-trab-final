@@ -2,7 +2,7 @@ package br.com.andersillva.trabfinal.api.dto;
 
 import java.time.LocalDateTime;
 
-import br.com.andersillva.trabfinal.domain.enumerator.TipoEvento;
+import br.com.andersillva.trabfinal.domain.model.enums.TipoEvento;
 import lombok.Data;
 
 @Data

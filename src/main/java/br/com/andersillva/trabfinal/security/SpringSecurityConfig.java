@@ -17,7 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import br.com.andersillva.trabfinal.domain.enumerator.PerfilUsuario;
+import br.com.andersillva.trabfinal.domain.model.enums.PerfilUsuario;
 import br.com.andersillva.trabfinal.domain.repository.UsuarioRepository;
 
 @EnableWebSecurity

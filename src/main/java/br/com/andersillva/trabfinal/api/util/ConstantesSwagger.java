@@ -1,4 +1,4 @@
-package br.com.andersillva.trabfinal.api;
+package br.com.andersillva.trabfinal.api.util;
 
 public final class ConstantesSwagger {
 

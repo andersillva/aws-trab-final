@@ -8,8 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.andersillva.trabfinal.domain.enumerator.SituacaoUsuario;
 import br.com.andersillva.trabfinal.domain.model.Usuario;
+import br.com.andersillva.trabfinal.domain.model.enums.SituacaoUsuario;
 
 public class UsuarioAutenticado implements UserDetails, GrantedAuthority {
 

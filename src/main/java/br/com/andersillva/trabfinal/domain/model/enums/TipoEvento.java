@@ -1,4 +1,4 @@
-package br.com.andersillva.trabfinal.domain.enumerator;
+package br.com.andersillva.trabfinal.domain.model.enums;
 
 import java.util.HashMap;
 import java.util.Map;

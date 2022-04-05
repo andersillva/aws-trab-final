@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import br.com.andersillva.trabfinal.domain.enumerator.SituacaoPartida;
+import br.com.andersillva.trabfinal.domain.model.enums.SituacaoPartida;
 import lombok.Data;
 
 @Data

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
-import br.com.andersillva.trabfinal.domain.enumerator.TipoEvento;
+import br.com.andersillva.trabfinal.domain.model.enums.TipoEvento;
 import lombok.Data;
 
 @Data

@@ -2,11 +2,9 @@ package br.com.andersillva.trabfinal.api.resource;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,13 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.andersillva.trabfinal.api.ConstantesSwagger;
-import br.com.andersillva.trabfinal.api.VersaoAPI;
 import br.com.andersillva.trabfinal.api.dto.ClubeAtletaDTO;
 import br.com.andersillva.trabfinal.api.dto.ClubeDTO;
 import br.com.andersillva.trabfinal.api.dto.ClubePersistenciaDTO;
 import br.com.andersillva.trabfinal.api.dto.ClubeResumoDTO;
 import br.com.andersillva.trabfinal.api.exception.RespostaPadraoErro;
+import br.com.andersillva.trabfinal.api.util.ConstantesSwagger;
+import br.com.andersillva.trabfinal.api.util.DTOFactory;
+import br.com.andersillva.trabfinal.api.util.EntityFactory;
+import br.com.andersillva.trabfinal.api.util.VersaoAPI;
 import br.com.andersillva.trabfinal.domain.model.Atleta;
 import br.com.andersillva.trabfinal.domain.model.Clube;
 import br.com.andersillva.trabfinal.domain.service.ClubeService;
@@ -54,8 +54,7 @@ public class ClubeResource {
 	public ResponseEntity<List<ClubeResumoDTO>> listarClubes() {
 		List<Clube> clubes = clubeService.listar();
 		if (clubes.size() > 0) {
-			ModelMapper mapper = new ModelMapper();
-			List<ClubeResumoDTO> clubesResumoDTO = clubes.stream().map(c -> mapper.map(c, ClubeResumoDTO.class)).collect(Collectors.toList());
+			List<ClubeResumoDTO> clubesResumoDTO = DTOFactory.getClubeResumoDTO(clubes);
 			return new ResponseEntity<>(clubesResumoDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -68,8 +67,7 @@ public class ClubeResource {
 	@GetMapping("/clubes/{id}")
 	public ResponseEntity<ClubeDTO> obterClube(@PathVariable("id") Long id) {
 		Clube clube = clubeService.obterPorId(id);
-		ModelMapper mapper = new ModelMapper();
-		ClubeDTO clubeDTO = mapper.map(clube, ClubeDTO.class);
+		ClubeDTO clubeDTO = DTOFactory.getClubeDTO(clube);
 		return new ResponseEntity<>(clubeDTO, HttpStatus.OK);
 	}
 
@@ -81,8 +79,7 @@ public class ClubeResource {
 	public ResponseEntity<List<ClubeAtletaDTO>> listarAtletas(@PathVariable("id") Long idClube) {
 		List<Atleta> atletas = clubeService.listarAtletas(idClube);
 		if (atletas.size() > 0) {
-			ModelMapper mapper = new ModelMapper();
-			List<ClubeAtletaDTO> clubeAtletaDTO = atletas.stream().map(a -> mapper.map(a, ClubeAtletaDTO.class)).collect(Collectors.toList());
+			List<ClubeAtletaDTO> clubeAtletaDTO = DTOFactory.getClubeAtletaDTO(atletas);
 			return new ResponseEntity<>(clubeAtletaDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -95,8 +92,7 @@ public class ClubeResource {
 						   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Já existe um clube com o nome informado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PostMapping(path="/clubes", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> incluirClube(@Valid @RequestBody ClubePersistenciaDTO clubePersistenciaDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Clube clube = mapper.map(clubePersistenciaDTO, Clube.class);
+		Clube clube = EntityFactory.getClube(clubePersistenciaDTO);
 		clubeService.incluir(clube);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(clube.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -109,8 +105,7 @@ public class ClubeResource {
 			   			   @ApiResponse(responseCode=ConstantesSwagger.CONFLICT, description="Já existe outro clube com o nome informado.", content={@Content(mediaType=MediaType.APPLICATION_JSON_VALUE, schema=@Schema(implementation = RespostaPadraoErro.class))})})
 	@PutMapping(path="/clubes/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> alterarClube(@PathVariable("id") Long id, @Valid @RequestBody ClubePersistenciaDTO clubePersistenciaDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Clube clube = mapper.map(clubePersistenciaDTO, Clube.class);
+		Clube clube = EntityFactory.getClube(clubePersistenciaDTO);
 		clube.setId(id);
 		clubeService.alterar(clube);
 		return new ResponseEntity<>(HttpStatus.OK);

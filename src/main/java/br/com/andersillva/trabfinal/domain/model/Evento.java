@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import br.com.andersillva.trabfinal.domain.enumerator.TipoEvento;
+import br.com.andersillva.trabfinal.domain.model.enums.TipoEvento;
 import lombok.Data;
 
 @Entity

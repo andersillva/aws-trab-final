@@ -11,8 +11,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import br.com.andersillva.trabfinal.domain.enumerator.PerfilUsuario;
-import br.com.andersillva.trabfinal.domain.enumerator.SituacaoUsuario;
+import br.com.andersillva.trabfinal.domain.model.enums.PerfilUsuario;
+import br.com.andersillva.trabfinal.domain.model.enums.SituacaoUsuario;
 import lombok.Data;
 
 @Entity
